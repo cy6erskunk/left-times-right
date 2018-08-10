@@ -1,0 +1,59 @@
+:root {
+  --size-unit: 12px;
+  --double-size-unit: calc(2 * var(--size-unit));
+  --smallest-step: calc(var(--size-unit) / 6);
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.score {
+  padding-right: var(--size-unit);
+  font-size: calc(2 * var(--double-size-unit));
+  text-align: right;
+}
+
+.task {
+  margin: calc(1 / 2 * var(--size-unit)) 0;
+  display: flex;
+  align-items: center;
+}
+
+.number {
+  font-size: var(--double-size-unit);
+  width: calc(3 * var(--size-unit));
+  padding: var(--size-unit);
+  margin: 0 auto;
+
+  text-align: center;
+
+  background: lightskyblue;
+  border-radius: var(--smallest-step);
+  box-shadow: 0 0 0 var(--smallest-step) navy;
+}
+
+.userInput {
+  font-size: var(--double-size-unit);
+  width: calc(2.5 * var(--size-unit));
+  background: lightgrey;
+}
+
+.submitButton {
+  width: 100px;
+  height: 100px;
+  font-size: var(--double-size-unit);
+  border-radius: 50%;
+  margin-left: calc(1 / 2 * var(--size-unit));
+
+  background-color: lightgreen;
+  box-shadow: 0 0 0 var(--smallest-step) green;
+}

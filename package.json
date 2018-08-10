@@ -1,0 +1,21 @@
+{
+  "name": "left-times-right",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "homepage" : "https://left-times-right.surge.sh",
+  "main": "src/index.js",
+  "dependencies": {
+    "react": "16.3.2",
+    "react-dom": "16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "publish": "surge --domain https://left-times-right.surge.sh ./build"
+  }
+}
