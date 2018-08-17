@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "keywords": [],
-  "homepage" : "https://left-times-right.surge.sh",
+  "homepage": "https://left-times-right.surge.sh",
   "main": "src/index.js",
   "dependencies": {
     "react": "16.3.2",

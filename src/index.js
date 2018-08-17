@@ -19,6 +19,7 @@ class App extends React.Component {
     super(props)
 
     this.inputRef = React.createRef()
+    this.emojiRef = React.createRef()
 
     if (localStorage.getItem('score') === null) {
       localStorage.setItem('score', 0)
@@ -27,12 +28,14 @@ class App extends React.Component {
     this.state = {
       left: generateDigit(),
       right: generateDigit(),
-      score: parseInt(localStorage.getItem('score'), 10)
+      score: parseInt(localStorage.getItem('score'), 10),
+      showEmoji: false,
+      isLove: true
     }
   }
 
   componentDidMount() {
-    this.inputRef.current.focus()
+    this.resetInput()
   }
 
   generateTask = () =>
@@ -48,20 +51,26 @@ class App extends React.Component {
 
   updateScore = () =>
     this.setState(state => {
-      const newScore =
-        state.prevLeft * state.prevRight ===
-        parseInt(this.inputRef.current.value, 10)
+      const isLove = state.prevLeft * state.prevRight === parseInt(this.inputRef.current.value, 10);
+      const newScore = isLove 
           ? state.score + 1
           : state.score - 1
       localStorage.setItem('score', newScore)
       return {
-        score: newScore
+        score: newScore,
+        showEmoji: true,
+        isLove
       }
     }, this.resetInput)
 
   resetInput = () => {
     this.inputRef.current.value = ''
+    
     this.inputRef.current.focus()
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant'
+    })
   }
 
   onSubmitTask = e => {
@@ -69,6 +78,13 @@ class App extends React.Component {
     if (this.inputRef.current.checkValidity()) {
       this.generateTask()
     }
+  }
+
+  onAnimationEnd = () => {
+    this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd);
+    this.setState({
+      showEmoji: false
+    })
   }
 
   render() {
@@ -97,6 +113,14 @@ class App extends React.Component {
             <span>{this.state.prevLeft * this.state.prevRight}</span>
           </div>
         ) : null}
+        {
+          this.state.showEmoji
+            ? (
+              <div class="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
+                <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
+              </div>)
+            : null
+        }
       </div>
     )
   }
