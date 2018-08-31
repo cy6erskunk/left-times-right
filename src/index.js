@@ -28,6 +28,8 @@ type State = {|
   isLove: boolean,
 |}
 
+type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
+
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
@@ -54,8 +56,8 @@ class App extends React.Component<Props, State> {
     this.resetInput()
   }
 
-  inputRef: React.Ref<'input'>
-  emojiRef: React.Ref<'div'>
+  inputRef: ReactObjRef<'input'>
+  emojiRef: ReactObjRef<'div'>
 
   generateTask = () =>
     this.setState(
@@ -70,8 +72,9 @@ class App extends React.Component<Props, State> {
 
   updateScore = () =>
     this.setState(state => {
-      // $FlowFixMe: for some reason flow does not understand `current` in ref
-      const isLove = state.prevLeft * state.prevRight === parseInt(this.inputRef.current.value, 10)
+      const isLove =
+        state.prevLeft * state.prevRight ===
+        parseInt(this.inputRef.current && this.inputRef.current.value, 10)
       const newScore = isLove ? state.score + 1 : state.score - 1
       localStorage.setItem('score', String(newScore))
       return {
@@ -83,9 +86,7 @@ class App extends React.Component<Props, State> {
 
   resetInput = () => {
     if (this.inputRef && this.inputRef.current) {
-      // $FlowFixMe: for some reason flow does not understand `current` in ref
       this.inputRef.current.value = ''
-      // $FlowFixMe: for some reason flow does not understand `current` in ref
       this.inputRef.current.focus()
     }
   }
@@ -99,7 +100,6 @@ class App extends React.Component<Props, State> {
 
   onSubmitTask = (e: Event) => {
     e.preventDefault()
-    // $FlowFixMe: for some reason flow does not understand `current` in ref
     if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
       this.generateTask()
     }
@@ -107,7 +107,6 @@ class App extends React.Component<Props, State> {
 
   onAnimationEnd = () => {
     if (this.emojiRef && this.emojiRef.current) {
-      // $FlowFixMe: for some reason flow does not understand `current` in ref
       this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd)
     }
     this.setState({
