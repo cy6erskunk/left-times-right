@@ -1,11 +1,15 @@
-import React from 'react'
+// @flow
+import * as React from 'react'
 import ReactDOM from 'react-dom'
 
 import './styles.css'
 
 const MILTIPLY_SIGN = 'x'
 const EQUALS_SIGN = '='
-const generateDigit = () => Math.floor(Math.random() * 9) + 2
+const MIN_NUMBER = 2
+const MAX_NUMBER = 9
+const INITIAL_SCORE = 0
+const generateDigit = () => Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER
 const Task = props => (
   <div className="task">
     <span className="number">{props.left}</span>
@@ -13,24 +17,36 @@ const Task = props => (
     <span className="number">{props.right}</span>
   </div>
 )
+type Props = {||}
+type State = {|
+  left: number,
+  right: number,
+  prevLeft: number,
+  prevRight: number,
+  score: number,
+  showEmoji: boolean,
+  isLove: boolean,
+|}
 
-class App extends React.Component {
-  constructor(props) {
+class App extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
 
     this.inputRef = React.createRef()
     this.emojiRef = React.createRef()
 
     if (localStorage.getItem('score') === null) {
-      localStorage.setItem('score', 0)
+      localStorage.setItem('score', String(INITIAL_SCORE))
     }
 
     this.state = {
       left: generateDigit(),
       right: generateDigit(),
+      prevLeft: -Infinity,
+      prevRight: -Infinity,
       score: parseInt(localStorage.getItem('score'), 10),
       showEmoji: false,
-      isLove: true
+      isLove: true,
     }
   }
 
@@ -38,52 +54,64 @@ class App extends React.Component {
     this.resetInput()
   }
 
+  inputRef: React.Ref<'input'>
+  emojiRef: React.Ref<'div'>
+
   generateTask = () =>
     this.setState(
       state => ({
         left: generateDigit(),
         right: generateDigit(),
         prevLeft: state.left,
-        prevRight: state.right
+        prevRight: state.right,
       }),
-      this.updateScore
+      this.updateScore,
     )
 
   updateScore = () =>
     this.setState(state => {
-      const isLove = state.prevLeft * state.prevRight === parseInt(this.inputRef.current.value, 10);
-      const newScore = isLove 
-          ? state.score + 1
-          : state.score - 1
-      localStorage.setItem('score', newScore)
+      // $FlowFixMe: for some reason flow does not understand `current` in ref
+      const isLove = state.prevLeft * state.prevRight === parseInt(this.inputRef.current.value, 10)
+      const newScore = isLove ? state.score + 1 : state.score - 1
+      localStorage.setItem('score', String(newScore))
       return {
         score: newScore,
         showEmoji: true,
-        isLove
+        isLove,
       }
     }, this.resetInput)
 
   resetInput = () => {
-    this.inputRef.current.value = ''
-    
-    this.inputRef.current.focus()
-    window.scrollTo({
-      top: 0,
-      behavior: 'instant'
-    })
+    if (this.inputRef && this.inputRef.current) {
+      // $FlowFixMe: for some reason flow does not understand `current` in ref
+      this.inputRef.current.value = ''
+      // $FlowFixMe: for some reason flow does not understand `current` in ref
+      this.inputRef.current.focus()
+    }
   }
 
-  onSubmitTask = e => {
+  onFocus = () => {
+    window.scrollTo(0, 0)
+    if (document.body) {
+      document.body.scrollTop = 0
+    }
+  }
+
+  onSubmitTask = (e: Event) => {
     e.preventDefault()
-    if (this.inputRef.current.checkValidity()) {
+    // $FlowFixMe: for some reason flow does not understand `current` in ref
+    if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
       this.generateTask()
     }
   }
 
   onAnimationEnd = () => {
-    this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd);
+    if (this.emojiRef && this.emojiRef.current) {
+      // $FlowFixMe: for some reason flow does not understand `current` in ref
+      this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd)
+    }
     this.setState({
-      showEmoji: false
+      showEmoji: false,
     })
   }
 
@@ -91,13 +119,14 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="score">{this.state.score}</div>
-        <form onSubmit={e => this.onSubmitTask(e)}>
+        <form onSubmit={this.onSubmitTask}>
           <Task left={this.state.left} right={this.state.right} />
           <input
+            onFocus={this.onFocus}
             className="userInput"
             type="number"
             ref={this.inputRef}
-            required
+            required={true}
             max={100}
             pattern={'[0-9]*'}
           />
@@ -113,18 +142,17 @@ class App extends React.Component {
             <span>{this.state.prevLeft * this.state.prevRight}</span>
           </div>
         ) : null}
-        {
-          this.state.showEmoji
-            ? (
-              <div class="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
-                <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
-              </div>)
-            : null
-        }
+        {this.state.showEmoji ? (
+          <div className="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
+            <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
+          </div>
+        ) : null}
       </div>
     )
   }
 }
 
 const rootElement = document.getElementById('root')
-ReactDOM.render(<App />, rootElement)
+if (rootElement) {
+  ReactDOM.render(<App />, rootElement)
+}

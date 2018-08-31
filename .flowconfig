@@ -1,0 +1,13 @@
+[ignore]
+public/
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+emoji=true
+
+[strict]
