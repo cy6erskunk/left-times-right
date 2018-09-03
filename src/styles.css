@@ -11,6 +11,23 @@ body {
   padding: 0;
 }
 
+.fatalError {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.fatalErrorMessage {
+  padding: 1em;
+  background: salmon;
+  border-radius: var(--smallest-step);
+  color: aliceblue;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;

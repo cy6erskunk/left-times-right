@@ -1,0 +1,21 @@
+// @flow
+import * as React from 'react'
+
+import {MILTIPLY_SIGN} from '../../constants'
+
+type Props = {|left: number, right: number|}
+
+const Task = ({left, right}: Props) => {
+  if (typeof left !== 'number' || typeof right !== 'number') {
+    throw new Error('Invalid arguments')
+  }
+
+  return (
+    <div className="task">
+      <span className="number">{left}</span>
+      <span>{MILTIPLY_SIGN}</span>
+      <span className="number">{right}</span>
+    </div>
+  )
+}
+export default Task
