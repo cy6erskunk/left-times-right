@@ -131,8 +131,7 @@ class App extends React.Component<Props, State> {
           />
           <button className={'submitButton'}>{'GO!'}</button>
         </form>
-        {typeof this.state.prevLeft !== 'undefined' &&
-        typeof this.state.prevRight !== 'undefined' ? (
+        {this.state.prevLeft > Number.MIN_VALUE && this.state.prevRight > Number.MIN_VALUE ? (
           <div>
             <span>{this.state.prevLeft}</span>
             <span>{MILTIPLY_SIGN}</span>
