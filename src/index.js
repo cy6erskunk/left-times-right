@@ -30,7 +30,7 @@ type State = {|
 
 type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
 
-class App extends React.Component<Props, State> {
+export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
