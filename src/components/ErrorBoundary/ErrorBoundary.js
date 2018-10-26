@@ -6,7 +6,7 @@ import type {ErrorInfo} from '../../types'
 
 type State = {|hasError: boolean|}
 
-class ErrorBoundary extends React.Component<{children?: React.Node}, State> {
+class ErrorBoundary extends React.Component<{children: React.Node}, State> {
   state = {hasError: false}
 
   componentDidCatch(error: Error, info: ErrorInfo) {
