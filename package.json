@@ -6,8 +6,8 @@
   "homepage": "https://left-times-right.surge.sh",
   "main": "src/index.js",
   "dependencies": {
-    "react": "16.4.2",
-    "react-dom": "16.4.2",
+    "react": "16.6.0",
+    "react-dom": "16.6.0",
     "react-scripts": "1.1.5"
   },
   "devDependencies": {
