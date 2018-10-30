@@ -106,26 +106,28 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
-        <div className="score">{this.state.score}</div>
-        <form onSubmit={this.onSubmitTask}>
-          <Task left={this.state.left} right={this.state.right} />
-          <input
-            onFocus={this.onFocus}
-            className="userInput"
-            type="number"
-            ref={this.inputRef}
-            required={true}
-            max={100}
-            pattern={'[0-9]*'}
-          />
-          <button className={'submitButton'}>{'GO!'}</button>
-        </form>
-        <PreviousTask left={this.state.prevLeft} right={this.state.prevRight} />
-        {this.state.showEmoji ? (
-          <div className="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
-            <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
-          </div>
-        ) : null}
+        <React.StrictMode>
+          <div className="score">{this.state.score}</div>
+          <form onSubmit={this.onSubmitTask}>
+            <Task left={this.state.left} right={this.state.right} />
+            <input
+              onFocus={this.onFocus}
+              className="userInput"
+              type="number"
+              ref={this.inputRef}
+              required={true}
+              max={100}
+              pattern={'[0-9]*'}
+            />
+            <button className={'submitButton'}>{'GO!'}</button>
+          </form>
+          <PreviousTask left={this.state.prevLeft} right={this.state.prevRight} />
+          {this.state.showEmoji ? (
+            <div className="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
+              <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
+            </div>
+          ) : null}
+        </React.StrictMode>
       </div>
     )
   }
