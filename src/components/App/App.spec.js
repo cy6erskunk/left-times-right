@@ -25,6 +25,4 @@ it('renders prev task when prev values are set', () => {
     prevLeft: 0,
     prevRight: 0,
   })
-
-  expect(element.find('.prevTask').length).toBe(1)
 })

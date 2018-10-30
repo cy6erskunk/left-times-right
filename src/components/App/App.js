@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react'
 
-import {INITIAL_SCORE, MILTIPLY_SIGN, EQUALS_SIGN} from '../../constants'
+import {INITIAL_SCORE} from '../../constants'
 import {generateDigit} from '../../helpers'
 import Task from '../Task/Task'
+import PreviousTask from '../PreviousTask/PreviousTask'
 
 type Props = {||}
 type State = {|
@@ -119,16 +120,7 @@ class App extends React.Component<Props, State> {
           />
           <button className={'submitButton'}>{'GO!'}</button>
         </form>
-        {this.state.prevLeft > Number.MIN_SAFE_INTEGER &&
-        this.state.prevRight > Number.MIN_SAFE_INTEGER ? (
-          <div className="prevTask">
-            <span>{this.state.prevLeft}</span>
-            <span>{MILTIPLY_SIGN}</span>
-            <span>{this.state.prevRight}</span>
-            <span>{EQUALS_SIGN}</span>
-            <span>{this.state.prevLeft * this.state.prevRight}</span>
-          </div>
-        ) : null}
+        <PreviousTask left={this.state.prevLeft} right={this.state.prevRight} />
         {this.state.showEmoji ? (
           <div className="emoji" ref={this.emojiRef} onAnimationEnd={this.onAnimationEnd}>
             <span role="img">{this.state.isLove ? '❤️' : '💩'}</span>
