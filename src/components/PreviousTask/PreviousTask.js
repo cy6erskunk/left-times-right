@@ -8,7 +8,7 @@ type Props = {
   right?: number,
 }
 
-const PreviousTask = ({left, right}: Props) =>
+export const PreviousTaskInner = ({left, right}: Props) =>
   left > Number.MIN_SAFE_INTEGER && right > Number.MIN_SAFE_INTEGER ? (
     <div className="prevTask">
       <span>{left}</span>
@@ -19,4 +19,4 @@ const PreviousTask = ({left, right}: Props) =>
     </div>
   ) : null
 
-export default PreviousTask
+export default React.memo(PreviousTaskInner)

@@ -1,7 +1,7 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import PreviousTask from './PreviousTask'
+import {PreviousTaskInner as PreviousTask} from './PreviousTask'
 
 it('renders nothing if left prop is absent', () => {
   const element = shallow(<PreviousTask right={1} />)

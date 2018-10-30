@@ -5,7 +5,7 @@ import {MILTIPLY_SIGN} from '../../constants'
 
 type Props = {|left: number, right: number|}
 
-const Task = ({left, right}: Props) => {
+export const TaskInner = ({left, right}: Props) => {
   if (typeof left !== 'number' || typeof right !== 'number') {
     throw new Error('Invalid arguments')
   }
@@ -18,4 +18,4 @@ const Task = ({left, right}: Props) => {
     </div>
   )
 }
-export default Task
+export default React.memo(TaskInner)

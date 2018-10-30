@@ -1,7 +1,7 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import Task from './Task'
+import {TaskInner as Task} from './Task'
 
 it('renders without crashing when valid arguments are provided', () => {
   shallow(<Task left={0} right={0} />)
