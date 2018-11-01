@@ -1,11 +1,11 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 
 import {MILTIPLY_SIGN, EQUALS_SIGN} from '../../constants'
 
 type Props = {
-  left?: number,
-  right?: number,
+  left: number,
+  right: number,
 }
 
 export const PreviousTaskInner = ({left, right}: Props) =>
