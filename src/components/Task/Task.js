@@ -18,4 +18,5 @@ export const TaskInner = ({left, right}: Props) => {
     </div>
   )
 }
+//$FlowFixMe - React.memo is not supported by flow as of 0.85.0
 export default React.memo(TaskInner)

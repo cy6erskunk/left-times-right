@@ -106,6 +106,7 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
+        {/* $FlowFixMe - React.StrictMode is not supported by flow as of 0.85.0 */}
         <React.StrictMode>
           <div className="score">{this.state.score}</div>
           <form onSubmit={this.onSubmitTask}>
