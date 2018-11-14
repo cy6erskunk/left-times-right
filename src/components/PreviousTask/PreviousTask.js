@@ -19,5 +19,5 @@ export const PreviousTaskInner = ({left, right}: Props) =>
     </div>
   ) : null
 
-//$FlowFixMe - React.memo is not supported by flow as of 0.85.0
+//$FlowFixMe - React.memo is not supported by flow as of 0.86.0
 export default React.memo(PreviousTaskInner)
