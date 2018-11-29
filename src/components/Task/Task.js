@@ -18,5 +18,6 @@ export const TaskInner = ({left, right}: Props) => {
     </div>
   )
 }
-//$FlowFixMe - React.memo is not supported by flow as of 0.86.0
-export default React.memo(TaskInner)
+
+const Memoized: React$StatelessFunctionalComponent<Props> = React.memo(TaskInner)
+export default Memoized
