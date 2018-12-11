@@ -25,7 +25,7 @@
     "eslint-plugin-flowtype": "3.2.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "3.0.0",
-    "flow-bin": "0.87.0",
+    "flow-bin": "0.88.0",
     "prettier": "1.15.3",
     "react-test-renderer": "16.6.3"
   },
