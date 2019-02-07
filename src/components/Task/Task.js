@@ -19,5 +19,5 @@ export const TaskInner = ({left, right}: Props) => {
   )
 }
 
-const Memoized: React$StatelessFunctionalComponent<Props> = React.memo(TaskInner)
+const Memoized: React$ComponentType<Props> = React.memo(TaskInner)
 export default Memoized

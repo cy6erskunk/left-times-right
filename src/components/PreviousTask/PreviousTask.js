@@ -19,5 +19,5 @@ export const PreviousTaskInner = ({left, right}: Props) =>
     </div>
   ) : null
 
-const Memoized: React$StatelessFunctionalComponent<Props> = React.memo(PreviousTaskInner)
+const Memoized: React$ComponentType<Props> = React.memo(PreviousTaskInner)
 export default Memoized
