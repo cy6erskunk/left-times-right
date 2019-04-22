@@ -33,11 +33,20 @@ body {
   text-align: center;
 }
 
+.scores {
+  display: flex;
+}
+
 .score {
+  margin-left:auto; 
+}
+
+.score, .hearts {
   padding-right: var(--size-unit);
   font-size: calc(2 * var(--double-size-unit));
   text-align: right;
 }
+
 
 .task {
   margin: calc(1 / 2 * var(--size-unit)) 0;
