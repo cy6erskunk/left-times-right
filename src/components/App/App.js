@@ -6,11 +6,11 @@ import {generateDigit} from '../../helpers'
 import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
 
-export const StartScene = (props: {|onClick: () => void|}) => (
+const StartScene = (props: {|onClick: () => void|}) => (
   <button onClick={props.onClick}>{'START'}</button>
 )
 
-export const GameScene = (props: {|
+const GameScene = (props: {|
   score: number,
   hearts: number,
   left: number,
@@ -52,7 +52,7 @@ export const GameScene = (props: {|
   </>
 )
 
-export const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
+const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
   <>
     <div>{score}</div>
     <button onClick={onClick}>{'RE-START'}</button>
@@ -75,7 +75,6 @@ type State = {|
   showEmoji: boolean,
   isLove: boolean,
   hearts: ?number,
-  scene: $Values<typeof scenes>,
 |}
 
 type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
@@ -100,7 +99,6 @@ class App extends React.Component<Props, State> {
       showEmoji: false,
       isLove: true,
       hearts: null,
-      scene: scenes.START,
     }
   }
 
@@ -113,7 +111,6 @@ class App extends React.Component<Props, State> {
 
   goToGame = () => {
     this.setState({
-      scene: scenes.GAME,
       hearts: 3,
       score: 0,
       showEmoji: false,
@@ -148,9 +145,9 @@ class App extends React.Component<Props, State> {
         }
       } else {
         return {
-          scene: scenes.END,
-          hearts: 0,
           score: newScore,
+          hearts: 0,
+          showEmoji: false,
         }
       }
     }, this.resetInput)
