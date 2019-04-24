@@ -187,26 +187,29 @@ class App extends React.Component<Props, State> {
 
   render() {
     const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
-    const Component = this.state.scene
     return (
       <div className="App">
         <React.StrictMode>
-          <Component
-            left={left}
-            right={right}
-            prevLeft={prevLeft}
-            prevRight={prevRight}
-            score={score}
-            showEmoji={showEmoji}
-            isLove={isLove}
-            hearts={hearts || INITIAL_HEARTS}
-            inputRef={this.inputRef}
-            emojiRef={this.emojiRef}
-            onAnimationEnd={this.onAnimationEnd}
-            onSubmitTask={this.onSubmitTask}
-            onFocus={this.onFocus}
-            onClick={this.goToGame}
-          />
+          {hearts === null ? (
+            <StartScene onClick={this.goToGame} />
+          ) : hearts != null && hearts > 0 ? (
+            <GameScene
+              left={left}
+              right={right}
+              prevLeft={prevLeft}
+              prevRight={prevRight}
+              score={score}
+              showEmoji={showEmoji}
+              isLove={isLove}
+              hearts={hearts || INITIAL_HEARTS}
+              inputRef={this.inputRef}
+              emojiRef={this.emojiRef}
+              onAnimationEnd={this.onAnimationEnd}
+              onSubmitTask={this.onSubmitTask}
+              onFocus={this.onFocus}
+            />
+          ) : (
+            <EndScene score={score} onClick={this.goToGame} />
           )}
         </React.StrictMode>
       </div>
