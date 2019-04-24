@@ -9,6 +9,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  background-color: pink;
 }
 
 .fatalError {
@@ -91,7 +92,7 @@ body {
   position: fixed;
   left: calc(50% - 5vh);
   top: calc(25% - 5vh);
-  animation: zoom 1s ease-out;
+  animation: zoom 0.8s ease-out;
 }
 @keyframes zoom {
   0%   { 
@@ -106,9 +107,44 @@ body {
   }
   94% {
     transform: scale(2); 
-    opacity: 1;
+    opacity: 0.6;
   }
   100% {
-    transform: scale(1); opacity: 0.5;
+    transform: scale(1); opacity: 0.3;
   }
+}
+
+.startScene, .endScene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.endScene {
+  flex-direction: column;
+}
+
+.startButton, .restartButton {
+  width: calc(10 * var(--double-size-unit));
+  height: calc(10 * var(--double-size-unit));
+  -webkit-appearance: none;
+  font-size: calc(2 * var(--double-size-unit));
+  padding: var(--double-size-unit);
+  border-radius: 50%;
+  background-color: deeppink;
+  border: var(--size-unit) solid black;
+}
+
+.startButton:active, .startButton:hover {
+  transition: background-color 0.2s;
+  background-color: rgb(122, 10, 70);
+}
+
+.gameOver, .finalScore  {
+  font-size: calc(2 * var(--double-size-unit));
 }

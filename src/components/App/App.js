@@ -7,7 +7,11 @@ import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
 
 const StartScene = (props: {|onClick: () => void|}) => (
-  <button onClick={props.onClick}>{'START'}</button>
+  <div className={'startScene'}>
+    <button onClick={props.onClick} className={'startButton'}>
+      {'START'}
+    </button>
+  </div>
 )
 
 const GameScene = (props: {|
@@ -53,10 +57,16 @@ const GameScene = (props: {|
 )
 
 const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
-  <>
-    <div>{score}</div>
-    <button onClick={onClick}>{'RE-START'}</button>
-  </>
+  <div className={'endScene'}>
+    <div className={'gameOver'}>{'GAME OVER'}</div>
+    <div className={'finalScore'}>
+      {'Score: '}
+      {score}
+    </div>
+    <button className={'restartButton'} onClick={onClick}>
+      {'RE-START'}
+    </button>
+  </div>
 )
 
 export const scenes = {
