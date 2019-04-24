@@ -116,6 +116,7 @@ body {
 
 .startScene, .endScene {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -123,17 +124,14 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.endScene {
-  flex-direction: column;
+  font-size: calc(2 * var(--double-size-unit));
 }
 
 .startButton, .restartButton {
   width: calc(10 * var(--double-size-unit));
   height: calc(10 * var(--double-size-unit));
-  -webkit-appearance: none;
   font-size: calc(2 * var(--double-size-unit));
+  -webkit-appearance: none;
   padding: var(--double-size-unit);
   border-radius: 50%;
   background-color: deeppink;

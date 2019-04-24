@@ -1,16 +1,25 @@
 // @flow
 import * as React from 'react'
 
-import {INITIAL_SCORE, INITIAL_HEARTS} from '../../constants'
+import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../../constants'
 import {generateDigit} from '../../helpers'
 import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
 
-const StartScene = (props: {|onClick: () => void|}) => (
+const CROWN = '👑'
+type StartSceneProps = {|onClick: () => void, topScore: ?string|}
+const StartScene = (props: StartSceneProps) => (
   <div className={'startScene'}>
     <button onClick={props.onClick} className={'startButton'}>
       {'START'}
     </button>
+    {props.topScore && Number(props.topScore) > 0 ? (
+      <div className={'topScore'}>
+        <span role={'img'}>{CROWN}</span>
+        {props.topScore}
+        <span role={'img'}>{CROWN}</span>
+      </div>
+    ) : null}
   </div>
 )
 
@@ -68,6 +77,18 @@ const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
     </button>
   </div>
 )
+
+export function getTopScore() {
+  const value = localStorage.getItem(TOP_SCORE_KEY)
+  return value && value !== 'NaN' ? value : '0'
+}
+
+export function setTopScore(topScore: string) {
+  return localStorage.setItem(
+    TOP_SCORE_KEY,
+    String(Math.max(parseInt(topScore, 10), parseInt(getTopScore(), 10))),
+  )
+}
 
 export const scenes = {
   START: StartScene,
@@ -145,8 +166,8 @@ class App extends React.Component<Props, State> {
         parseInt(this.inputRef.current && this.inputRef.current.value, 10)
       const newScore = isLove ? state.score + 1 : state.score
       localStorage.setItem('score', String(newScore))
-      if (state.hearts && state.hearts > 0) {
-        const newHearts = isLove ? state.hearts : state.hearts - 1
+      const newHearts = state.hearts ? (isLove ? state.hearts : state.hearts - 1) : 0
+      if (newHearts > 0) {
         return {
           score: newScore,
           hearts: newHearts,
@@ -154,6 +175,7 @@ class App extends React.Component<Props, State> {
           isLove,
         }
       } else {
+        setTopScore(String(newScore))
         return {
           score: newScore,
           hearts: 0,
@@ -198,7 +220,7 @@ class App extends React.Component<Props, State> {
       <div className="App">
         <React.StrictMode>
           {hearts === null ? (
-            <StartScene onClick={this.goToGame} />
+            <StartScene onClick={this.goToGame} topScore={getTopScore()} />
           ) : hearts != null && hearts > 0 ? (
             <GameScene
               left={left}
