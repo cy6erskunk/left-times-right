@@ -41,6 +41,7 @@
     "import/order": ["error", { "newlines-between": "always"}],
     "import/newline-after-import": ["error", { "count": 1 }],
     "react/prop-types": "off",
-    "compat/compat": "error"
+    "compat/compat": "error",
+    "no-nested-ternary": "off"
   }
 }
