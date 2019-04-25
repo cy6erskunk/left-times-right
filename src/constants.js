@@ -6,3 +6,5 @@ export const MAX_NUMBER = 9
 export const INITIAL_SCORE = 0
 export const INITIAL_HEARTS = 3
 export const TOP_SCORE_KEY = 'top-score'
+export const CORRECT_ANSWER_EMOJI = '🎉'
+export const INCORRECT_ANSWER_EMOJI = '💔'
