@@ -1,9 +1,8 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../../constants'
-
-import App, {scenes, getTopScore, setTopScore} from './App'
+import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../constants'
+import App, {scenes, getTopScore, setTopScore} from '../components/App/App'
 
 const {START, GAME, END} = scenes
 
