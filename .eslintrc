@@ -43,5 +43,13 @@
     "react/prop-types": "off",
     "compat/compat": "error",
     "no-nested-ternary": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.js"],
+      "rules": {
+        "no-magic-numbers": "off"
+      }
+    }
+  ]
 }

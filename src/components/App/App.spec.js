@@ -1,9 +1,9 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import {INITIAL_SCORE, INITIAL_HEARTS} from '../../constants'
+import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../../constants'
 
-import App, {scenes} from './App'
+import App, {scenes, getTopScore, setTopScore} from './App'
 
 const {START, GAME, END} = scenes
 
@@ -57,5 +57,32 @@ it('renders prev task when prev values are set', () => {
   element.setState({
     prevLeft: 0,
     prevRight: 0,
+  })
+})
+
+describe('getTopScore', () => {
+  beforeEach(() => {
+    localStorage.removeItem(TOP_SCORE_KEY)
+  })
+
+  it('returns "0" by default', () => {
+    expect(getTopScore()).toBe(String(0))
+  })
+
+  const numberValues = [1, 100]
+
+  numberValues.forEach(value => {
+    it(`returns previously set Number "${value}"`, () => {
+      setTopScore(String(value))
+      expect(getTopScore()).toBe(String(value))
+    })
+  })
+
+  const nonNumberValues = [null, 'NaN', NaN, Infinity, 'abc']
+  nonNumberValues.forEach(value => {
+    it(`returns "0" instead of non-Number "${value}"`, () => {
+      setTopScore(String(value))
+      expect(getTopScore()).toBe('0')
+    })
   })
 })
