@@ -9,25 +9,10 @@ import {
   INCORRECT_ANSWER_EMOJI,
 } from '../../constants'
 import {generateDigit} from '../../helpers'
+import StartScene from '../Start/Start'
+import EndScene from '../End/End'
 import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
-
-const CROWN = '👑'
-type StartSceneProps = {|onClick: () => void, topScore: ?string|}
-const StartScene = (props: StartSceneProps) => (
-  <div className={'startScene'}>
-    <button onClick={props.onClick} className={'startButton'}>
-      {'START'}
-    </button>
-    {props.topScore && Number(props.topScore) > 0 ? (
-      <div className={'topScore'}>
-        <span role={'img'}>{CROWN}</span>
-        {props.topScore}
-        <span role={'img'}>{CROWN}</span>
-      </div>
-    ) : null}
-  </div>
-)
 
 const GameScene = (props: {|
   score: number,
@@ -69,19 +54,6 @@ const GameScene = (props: {|
       </div>
     ) : null}
   </>
-)
-
-const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
-  <div className={'endScene'}>
-    <div className={'gameOver'}>{'GAME OVER'}</div>
-    <div className={'finalScore'}>
-      {'Score: '}
-      {score}
-    </div>
-    <button className={'restartButton'} onClick={onClick}>
-      {'RE-START'}
-    </button>
-  </div>
 )
 
 export function getTopScore() {
