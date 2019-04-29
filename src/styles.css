@@ -36,15 +36,28 @@ body {
 
 .scores {
   display: flex;
+  justify-content: space-between;
 }
 
 .score {
   margin-left:auto; 
 }
 
-.score, .hearts {
-  padding-right: var(--size-unit);
+.score, .hearts, .seconds {
   font-size: calc(2 * var(--double-size-unit));
+  margin: 0;
+  width: 5em;
+}
+
+.seconds {
+  text-align: left;
+}
+
+.score {
+  text-align: center;
+}
+
+.hearts {
   text-align: right;
 }
 

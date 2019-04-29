@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 
-import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../../constants'
+import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY, GAME_TIMEOUT_IN_MS} from '../../constants'
 import {generateDigit} from '../../helpers'
 import StartScene from '../Start/Start'
 import GameScene from '../Game/Game'
@@ -66,6 +66,7 @@ class App extends React.Component<Props, State> {
     this.resetInput()
   }
 
+  timer: ?TimeoutID = null
   inputRef: ReactObjRef<'input'>
   emojiRef: ReactObjRef<'div'>
 
@@ -77,27 +78,21 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  generateTask = () =>
-    this.setState(
-      state => ({
-        left: generateDigit(),
-        right: generateDigit(),
-        prevLeft: state.left,
-        prevRight: state.right,
-      }),
-      this.updateScore,
-    )
-
   updateScore = () =>
     this.setState(state => {
+      const newState = {
+        left: generateDigit(),
+        right: generateDigit(),
+      }
       const isLove =
-        state.prevLeft * state.prevRight ===
+        state.left * state.right ===
         parseInt(this.inputRef.current && this.inputRef.current.value, 10)
       const newScore = isLove ? state.score + 1 : state.score
       localStorage.setItem('score', String(newScore))
       const newHearts = state.hearts ? (isLove ? state.hearts : state.hearts - 1) : 0
       if (newHearts > 0) {
         return {
+          ...newState,
           score: newScore,
           hearts: newHearts,
           showEmoji: true,
@@ -106,6 +101,7 @@ class App extends React.Component<Props, State> {
       } else {
         setTopScore(String(newScore))
         return {
+          ...newState,
           score: newScore,
           hearts: 0,
           showEmoji: false,
@@ -130,7 +126,7 @@ class App extends React.Component<Props, State> {
   onSubmitTask = (e: Event) => {
     e.preventDefault()
     if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
-      this.generateTask()
+      this.updateScore()
     }
   }
 
@@ -143,29 +139,42 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  render() {
+  renderGameScene = () => {
     const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
+    this.timer = setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
+    return (
+      <GameScene
+        key={[left, right, score].join('-')}
+        left={left}
+        right={right}
+        prevLeft={prevLeft}
+        prevRight={prevRight}
+        score={score}
+        showEmoji={showEmoji}
+        isLove={isLove}
+        hearts={hearts || INITIAL_HEARTS}
+        inputRef={this.inputRef}
+        emojiRef={this.emojiRef}
+        onAnimationEnd={this.onAnimationEnd}
+        onSubmitTask={this.onSubmitTask}
+        onFocus={this.onFocus}
+      />
+    )
+  }
+
+  render() {
+    const {score, hearts} = this.state
     return (
       <div className="App">
         <React.StrictMode>
           {hearts === null ? (
             <StartScene onClick={this.goToGame} topScore={getTopScore()} />
           ) : hearts != null && hearts > 0 ? (
-            <GameScene
-              left={left}
-              right={right}
-              prevLeft={prevLeft}
-              prevRight={prevRight}
-              score={score}
-              showEmoji={showEmoji}
-              isLove={isLove}
-              hearts={hearts || INITIAL_HEARTS}
-              inputRef={this.inputRef}
-              emojiRef={this.emojiRef}
-              onAnimationEnd={this.onAnimationEnd}
-              onSubmitTask={this.onSubmitTask}
-              onFocus={this.onFocus}
-            />
+            this.renderGameScene()
           ) : (
             <EndScene score={score} onClick={this.goToGame} />
           )}
