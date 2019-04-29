@@ -1,88 +1,11 @@
 // @flow
 import * as React from 'react'
 
-import {
-  INITIAL_SCORE,
-  INITIAL_HEARTS,
-  TOP_SCORE_KEY,
-  CORRECT_ANSWER_EMOJI,
-  INCORRECT_ANSWER_EMOJI,
-} from '../../constants'
+import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../../constants'
 import {generateDigit} from '../../helpers'
-import Task from '../Task/Task'
-import PreviousTask from '../PreviousTask/PreviousTask'
-
-const CROWN = '👑'
-type StartSceneProps = {|onClick: () => void, topScore: ?string|}
-const StartScene = (props: StartSceneProps) => (
-  <div className={'startScene'}>
-    <button onClick={props.onClick} className={'startButton'}>
-      {'START'}
-    </button>
-    {props.topScore && Number(props.topScore) > 0 ? (
-      <div className={'topScore'}>
-        <span role={'img'}>{CROWN}</span>
-        {props.topScore}
-        <span role={'img'}>{CROWN}</span>
-      </div>
-    ) : null}
-  </div>
-)
-
-const GameScene = (props: {|
-  score: number,
-  hearts: number,
-  left: number,
-  right: number,
-  prevLeft: number,
-  prevRight: number,
-  onSubmitTask: (e: Event) => void,
-  onFocus: () => void,
-  onAnimationEnd: () => void,
-  inputRef: React.Ref<'input'>,
-  emojiRef: React.Ref<'div'>,
-  showEmoji: boolean,
-  isLove: boolean,
-|}) => (
-  <>
-    <div className="scores">
-      <div className="score">{props.score}</div>
-      <div className="hearts">{new Array(props.hearts).fill('❤️')}</div>
-    </div>
-    <form onSubmit={props.onSubmitTask}>
-      <Task left={props.left} right={props.right} />
-      <input
-        onFocus={props.onFocus}
-        className="userInput"
-        type="number"
-        ref={props.inputRef}
-        required={true}
-        max={100}
-        pattern={'[0-9]*'}
-      />
-      <button className={'submitButton'}>{'GO!'}</button>
-    </form>
-    <PreviousTask left={props.prevLeft} right={props.prevRight} />
-    {props.showEmoji ? (
-      <div className="emoji" ref={props.emojiRef} onAnimationEnd={props.onAnimationEnd}>
-        <span role="img">{props.isLove ? CORRECT_ANSWER_EMOJI : INCORRECT_ANSWER_EMOJI}</span>
-      </div>
-    ) : null}
-  </>
-)
-
-const EndScene = ({score, onClick}: {|score: number, onClick: () => void|}) => (
-  <div className={'endScene'}>
-    <div className={'gameOver'}>{'GAME OVER'}</div>
-    <div className={'finalScore'}>
-      {'Score: '}
-      {score}
-    </div>
-    <button className={'restartButton'} onClick={onClick}>
-      {'RE-START'}
-    </button>
-  </div>
-)
+import StartScene from '../Start/Start'
+import GameScene from '../Game/Game'
+import EndScene from '../End/End'
 
 export function getTopScore() {
   const value = localStorage.getItem(TOP_SCORE_KEY)
