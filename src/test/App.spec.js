@@ -31,14 +31,6 @@ it('sets main scene correctly', () => {
   expect(element.find(START).length).toBe(0)
   expect(element.find(GAME).length).toBe(1)
   expect(element.find(END).length).toBe(0)
-
-  const GameElement = element.find(GAME).shallow()
-
-  expect(GameElement.find('.score').length).toBe(1)
-  expect(GameElement.find('form').length).toBe(1)
-  expect(GameElement.find('.userInput').length).toBe(1)
-  expect(GameElement.find('.submitButton').length).toBe(1)
-  expect(GameElement.find('.prevTask').length).toBe(0)
 })
 
 it('renders outro when lives are gone', () => {
