@@ -62,10 +62,6 @@ class App extends React.Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    this.resetInput()
-  }
-
   timer: ?TimeoutID = null
   inputRef: ReactObjRef<'input'>
   emojiRef: ReactObjRef<'div'>

@@ -5,6 +5,8 @@ import {CORRECT_ANSWER_EMOJI, INCORRECT_ANSWER_EMOJI, SECOND_IN_MS} from '../../
 import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
 
+type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
+
 type ExternalProps = {|
   score: number,
   hearts: number,
@@ -15,7 +17,7 @@ type ExternalProps = {|
   onSubmitTask: (e: Event) => void,
   onFocus: () => void,
   onAnimationEnd: () => void,
-  inputRef: React.Ref<'input'>,
+  inputRef: ReactObjRef<'input'>,
   emojiRef: React.Ref<'div'>,
   showEmoji: boolean,
   isLove: boolean,
@@ -59,7 +61,11 @@ type State = {|
 |}
 class StatefulGameScene extends React.Component<ExternalProps, State> {
   state = {secondsLeft: 5}
+
   componentDidMount = () => {
+    if (this.props.inputRef && this.props.inputRef.current) {
+      this.props.inputRef.current.focus()
+    }
     this.scheduleSecondsUpdate()
   }
   componentWillUnmount = () => {
