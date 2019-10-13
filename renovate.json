@@ -1,5 +1,7 @@
 {
   "extends": [
-    "config:base"
+    "github>cy6erskunk/renovate-config",
+    "github>cy6erskunk/renovate-config:automerge-patch-deps",
+    "github>cy6erskunk/renovate-config:automerge-minor-patch-devdeps"
   ]
 }
