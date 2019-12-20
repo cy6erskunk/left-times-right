@@ -17,7 +17,7 @@
     "@babel/preset-flow": "7.7.4",
     "@cyberskunk/eslint-config": "1.0.0",
     "babel-eslint": "10.0.3",
-    "enzyme": "3.10.0",
+    "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "eslint": "6.7.2",
     "eslint-config-prettier": "6.7.0",
