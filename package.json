@@ -11,9 +11,9 @@
     "react-scripts": "3.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.10.1",
-    "@babel/core": "7.10.2",
-    "@babel/preset-env": "7.10.2",
+    "@babel/cli": "7.10.3",
+    "@babel/core": "7.10.3",
+    "@babel/preset-env": "7.10.3",
     "@babel/preset-flow": "7.10.1",
     "@cyberskunk/eslint-config": "1.0.0",
     "babel-eslint": "10.1.0",
