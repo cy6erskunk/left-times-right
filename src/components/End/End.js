@@ -1,7 +1,9 @@
 // @flow
 import * as React from 'react'
 
-const EndScene = ({score = 0, onClick}: {|score: number, onClick: () => void|}) => (
+type Props = {|score: number, onClick: () => void|}
+
+const EndScene = ({score = 0, onClick}: Props) => (
   <div className={'endScene'}>
     <div className={'gameOver'}>{'GAME OVER'}</div>
     <div className={'finalScore'}>

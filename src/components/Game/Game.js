@@ -23,17 +23,28 @@ type ExternalProps = {|
   isLove: boolean,
 |}
 
+type ScoresProps = {|
+  secondsLeft: number,
+  score: number,
+  hearts: number,
+|}
+
+export const Scores = (props: ScoresProps) => (
+  <div className="scores">
+    <div className="seconds">
+      {':'}
+      {props.secondsLeft}
+    </div>
+    <div className="score">{props.score}</div>
+    <div className="hearts">{new Array(props.hearts).fill('❤️')}</div>
+  </div>
+)
+
 type Props = {|...ExternalProps, secondsLeft: number|}
+
 export const GameScene = (props: Props) => (
   <>
-    <div className="scores">
-      <div className="seconds">
-        {':'}
-        {props.secondsLeft}
-      </div>
-      <div className="score">{props.score}</div>
-      <div className="hearts">{new Array(props.hearts).fill('❤️')}</div>
-    </div>
+    <Scores secondsLeft={props.secondsLeft} score={props.score} hearts={props.hearts} />
     <form onSubmit={props.onSubmitTask}>
       <Task left={props.left} right={props.right} />
       <input
