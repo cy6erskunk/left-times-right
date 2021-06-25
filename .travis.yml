@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - "node"
-  - "lts/*"
-
-script:
-  - npm run flow
-  - npm run lint
-  - npm test
