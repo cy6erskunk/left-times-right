@@ -6,6 +6,7 @@
   "homepage": "https://left-times-right.surge.sh",
   "main": "src/index.js",
   "dependencies": {
+    "numeric-keyboard": "^0.7.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scripts": "3.2.0"
@@ -34,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prepublish": "npm run test && npm run build",
+    "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
     "lint": "eslint -c .eslintrc ./src",
     "flow": "flow"
