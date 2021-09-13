@@ -27,7 +27,9 @@ type ExternalProps = {|
 type Props = {|...ExternalProps, secondsLeft: number|}
 export const GameScene = (props: Props) => {
   function onInput(value: string) {
-    props.inputRef.current.value = value
+    if (props.inputRef.current) {
+      props.inputRef.current.value = value
+    }
   }
 
   return (
