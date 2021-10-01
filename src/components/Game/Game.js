@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import {NumericInput} from 'numeric-keyboard/dist/numeric_keyboard.react'
 
 import {CORRECT_ANSWER_EMOJI, INCORRECT_ANSWER_EMOJI, SECOND_IN_MS} from '../../constants'
 import Task from '../Task/Task'
@@ -24,37 +25,49 @@ type ExternalProps = {|
 |}
 
 type Props = {|...ExternalProps, secondsLeft: number|}
-export const GameScene = (props: Props) => (
-  <>
-    <div className="scores">
-      <div className="seconds">
-        {':'}
-        {props.secondsLeft}
+export const GameScene = (props: Props) => {
+  function onInput(value: string) {
+    if (props.inputRef.current) {
+      props.inputRef.current.value = value
+    }
+  }
+
+  return (
+    <>
+      <div className="scores">
+        <div className="seconds">
+          {':'}
+          {props.secondsLeft}
+        </div>
+        <div className="score">{props.score}</div>
+        <div className="hearts">{new Array(props.hearts).fill('❤️')}</div>
       </div>
-      <div className="score">{props.score}</div>
-      <div className="hearts">{new Array(props.hearts).fill('❤️')}</div>
-    </div>
-    <form onSubmit={props.onSubmitTask}>
       <Task left={props.left} right={props.right} />
       <input
-        onFocus={props.onFocus}
         className="userInput"
-        type="number"
+        type="text"
+        inputMode="decimal"
         ref={props.inputRef}
         required={true}
         max={100}
         pattern={'[0-9]*'}
       />
-      <button className={'submitButton'}>{'GO!'}</button>
-    </form>
-    <PreviousTask left={props.prevLeft} right={props.prevRight} />
-    {props.showEmoji ? (
-      <div className="emoji" ref={props.emojiRef} onAnimationEnd={props.onAnimationEnd}>
-        <span role="img">{props.isLove ? CORRECT_ANSWER_EMOJI : INCORRECT_ANSWER_EMOJI}</span>
-      </div>
-    ) : null}
-  </>
-)
+      <NumericInput
+        autofocus={true}
+        layout="tel"
+        placeholder=""
+        onInput={onInput}
+        onEnterpress={props.onSubmitTask}
+      />
+      <PreviousTask left={props.prevLeft} right={props.prevRight} />
+      {props.showEmoji ? (
+        <div className="emoji" ref={props.emojiRef} onAnimationEnd={props.onAnimationEnd}>
+          <span role="img">{props.isLove ? CORRECT_ANSWER_EMOJI : INCORRECT_ANSWER_EMOJI}</span>
+        </div>
+      ) : null}
+    </>
+  )
+}
 
 type State = {|
   secondsLeft: number,
@@ -63,9 +76,6 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
   state = {secondsLeft: 5}
 
   componentDidMount = () => {
-    if (this.props.inputRef && this.props.inputRef.current) {
-      this.props.inputRef.current.focus()
-    }
     this.scheduleSecondsUpdate()
   }
   componentWillUnmount = () => {

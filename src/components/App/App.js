@@ -74,15 +74,16 @@ class App extends React.Component<Props, State> {
     })
   }
 
+  getValue = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10)
+
   updateScore = () =>
     this.setState(state => {
       const newState = {
         left: generateDigit(),
         right: generateDigit(),
       }
-      const isLove =
-        state.left * state.right ===
-        parseInt(this.inputRef.current && this.inputRef.current.value, 10)
+      const isLove = state.left * state.right === this.getValue()
+
       const newScore = isLove ? state.score + 1 : state.score
       localStorage.setItem('score', String(newScore))
       const newHearts = state.hearts ? (isLove ? state.hearts : state.hearts - 1) : 0
@@ -108,7 +109,6 @@ class App extends React.Component<Props, State> {
   resetInput = () => {
     if (this.inputRef && this.inputRef.current) {
       this.inputRef.current.value = ''
-      this.inputRef.current.focus()
     }
   }
 
@@ -120,7 +120,6 @@ class App extends React.Component<Props, State> {
   }
 
   onSubmitTask = (e: Event) => {
-    e.preventDefault()
     if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
       this.updateScore()
     }
