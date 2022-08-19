@@ -7,16 +7,16 @@ import type {ErrorInfo} from '../../types'
 type State = {|hasError: boolean|}
 
 class ErrorBoundary extends React.Component<{children: React.Node}, State> {
-  state = {hasError: false}
+  state: State = {hasError: false}
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  componentDidCatch(error: Error, info: ErrorInfo): void {
     this.setState({hasError: true})
     logError(error, info)
   }
 
-  clickButton = () => window.location.reload()
+  clickButton: () => void = () => window.location.reload()
 
-  render() {
+  render(): React.Node {
     if (this.state.hasError) {
       return (
         <div className={'fatalError'}>

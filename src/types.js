@@ -1,3 +1,5 @@
-export type ErrorInfo = {|
+// @flow
+export type ErrorInfo = {
   componentStack: string,
-|}
+  ...
+}

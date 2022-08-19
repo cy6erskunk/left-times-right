@@ -7,12 +7,12 @@ import StartScene from '../Start/Start'
 import GameScene from '../Game/Game'
 import EndScene from '../End/End'
 
-export function getTopScore() {
+export function getTopScore(): string {
   const value = localStorage.getItem(TOP_SCORE_KEY)
   return value && value !== 'NaN' ? value : '0'
 }
 
-export function setTopScore(topScore: string) {
+export function setTopScore(topScore: string): void {
   return localStorage.setItem(
     TOP_SCORE_KEY,
     String(Math.max(parseInt(topScore, 10), parseInt(getTopScore(), 10))),
@@ -66,7 +66,7 @@ class App extends React.Component<Props, State> {
   inputRef: ReactObjRef<'input'>
   emojiRef: ReactObjRef<'div'>
 
-  goToGame = () => {
+  goToGame: () => void = () => {
     this.setState({
       hearts: 3,
       score: 0,
@@ -74,9 +74,9 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  getValue = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10)
+  getValue: () => number = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10)
 
-  updateScore = () =>
+  updateScore: () => void = () =>
     this.setState(state => {
       const newState = {
         left: generateDigit(),
@@ -106,26 +106,26 @@ class App extends React.Component<Props, State> {
       }
     }, this.resetInput)
 
-  resetInput = () => {
+  resetInput: () => void = () => {
     if (this.inputRef && this.inputRef.current) {
       this.inputRef.current.value = ''
     }
   }
 
-  onFocus = () => {
+  onFocus: () => void = () => {
     window.scrollTo(0, 0)
     if (document.body) {
       document.body.scrollTop = 0
     }
   }
 
-  onSubmitTask = (e: Event) => {
+  onSubmitTask: (e: Event) => void = (e: Event) => {
     if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
       this.updateScore()
     }
   }
 
-  onAnimationEnd = () => {
+  onAnimationEnd: () => void = () => {
     if (this.emojiRef && this.emojiRef.current) {
       this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd)
     }
@@ -134,7 +134,7 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  renderGameScene = () => {
+  renderGameScene: () => React.Node = () => {
     const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
     if (this.timer) {
       clearTimeout(this.timer)
@@ -161,7 +161,7 @@ class App extends React.Component<Props, State> {
     )
   }
 
-  render() {
+  render(): React.Node {
     const {score, hearts} = this.state
     return (
       <div className="App">

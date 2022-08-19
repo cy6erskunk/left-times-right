@@ -25,7 +25,7 @@ type ExternalProps = {|
 |}
 
 type Props = {|...ExternalProps, secondsLeft: number|}
-export const GameScene = (props: Props) => {
+export const GameScene = (props: Props): React.Node => {
   function onInput(value: string) {
     if (props.inputRef.current) {
       props.inputRef.current.value = value
@@ -73,12 +73,12 @@ type State = {|
   secondsLeft: number,
 |}
 class StatefulGameScene extends React.Component<ExternalProps, State> {
-  state = {secondsLeft: 5}
+  state: State = {secondsLeft: 5}
 
-  componentDidMount = () => {
+  componentDidMount: () => void = () => {
     this.scheduleSecondsUpdate()
   }
-  componentWillUnmount = () => {
+  componentWillUnmount: () => void = () => {
     if (this.secondsTimeoutId) {
       clearTimeout(this.secondsTimeoutId)
     }
@@ -86,11 +86,11 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
 
   secondsTimeoutId: ?TimeoutID = null
 
-  scheduleSecondsUpdate = () => {
+  scheduleSecondsUpdate: () => void = () => {
     this.secondsTimeoutId = setTimeout(this.updateSeconds, SECOND_IN_MS)
   }
 
-  updateSeconds = () => {
+  updateSeconds: () => void = () => {
     this.setState(
       {
         secondsLeft: this.state.secondsLeft - 1,
@@ -99,7 +99,7 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
     )
   }
 
-  render() {
+  render(): React.Element<typeof GameScene> {
     return <GameScene secondsLeft={this.state.secondsLeft} {...this.props} />
   }
 }
