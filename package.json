@@ -39,5 +39,8 @@
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
     "lint": "eslint -c .eslintrc ./src",
     "flow": "flow"
+  },
+  "engines": {
+    "npm": ">=8"
   }
 }
