@@ -77,7 +77,7 @@ class App extends React.Component<Props, State> {
   getValue: () => number = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10)
 
   updateScore: () => void = () =>
-    this.setState(state => {
+    this.setState((state) => {
       const newState = {
         left: generateDigit(),
         right: generateDigit(),
