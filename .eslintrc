@@ -1,20 +1,14 @@
 {
   "root": true,
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": [
     "eslint-config-react-app",
     "@cyberskunk",
-    "@cyberskunk/eslint-config/react",
     "@cyberskunk/eslint-config/node",
-    "@cyberskunk/eslint-config/es6",
-    "plugin:prettier/recommended",
-    "prettier/flowtype",
-    "prettier/react",
-    "prettier/standard"
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "prettier",
-    "import",
     "compat"
   ],
   "rules": {
