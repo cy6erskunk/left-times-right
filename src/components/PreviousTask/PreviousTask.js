@@ -8,7 +8,7 @@ type Props = {
   right: number,
 }
 
-export const PreviousTaskInner = ({left, right}: Props) =>
+export const PreviousTaskInner = ({left, right}: Props): React.Element<'div'> | null =>
   left > Number.MIN_SAFE_INTEGER && right > Number.MIN_SAFE_INTEGER ? (
     <div className="prevTask">
       <span>{left}</span>

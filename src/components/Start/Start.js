@@ -5,7 +5,7 @@ const CROWN = '👑'
 
 type StartSceneProps = {|onClick: () => void, topScore: ?string|}
 
-const StartScene = (props: StartSceneProps) => (
+const StartScene = (props: StartSceneProps): React.Element<'div'> => (
   <div className={'startScene'}>
     <button onClick={props.onClick} className={'startButton'}>
       {'START'}

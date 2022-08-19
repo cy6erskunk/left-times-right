@@ -62,7 +62,7 @@ describe('getTopScore', () => {
 
   const numberValues = [1, 100]
 
-  numberValues.forEach(value => {
+  numberValues.forEach((value) => {
     it(`returns previously set Number "${value}"`, () => {
       setTopScore(String(value))
       expect(getTopScore()).toBe(String(value))
@@ -70,7 +70,7 @@ describe('getTopScore', () => {
   })
 
   const nonNumberValues = [null, 'NaN', NaN, Infinity, 'abc']
-  nonNumberValues.forEach(value => {
+  nonNumberValues.forEach((value) => {
     it(`returns "0" instead of non-Number "${value}"`, () => {
       setTopScore(String(value))
       expect(getTopScore()).toBe('0')

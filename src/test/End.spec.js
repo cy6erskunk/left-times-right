@@ -14,5 +14,5 @@ it('renders without crashing', () => {
 it('renders provided score', () => {
   const score = 123
   const element = shallow(<EndScene score={score} />)
-  expect(element.find('.finalScore').text()).toContain(score)
+  expect(element.find('.finalScore').text()).toContain(String(score))
 })

@@ -17,7 +17,7 @@ it('renders correctly', () => {
   const left = 111
   const right = 999
   const element = shallow(<PreviousTask left={left} right={right} />)
-  expect(element.html()).toContain(left)
-  expect(element.html()).toContain(right)
-  expect(element.html()).toContain(left * right)
+  expect(element.html()).toContain(String(left))
+  expect(element.html()).toContain(String(right))
+  expect(element.html()).toContain(String(left * right))
 })

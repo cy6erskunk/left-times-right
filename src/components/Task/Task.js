@@ -5,7 +5,7 @@ import {MILTIPLY_SIGN} from '../../constants'
 
 type Props = {|left: number, right: number|}
 
-export const TaskInner = ({left, right}: Props) => {
+export const TaskInner = ({left, right}: Props): React.Element<'div'> => {
   if (typeof left !== 'number' || typeof right !== 'number') {
     throw new Error('Invalid arguments')
   }

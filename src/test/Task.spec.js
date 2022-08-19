@@ -18,16 +18,6 @@ it('renders left and right values', () => {
   const right = 1
   const element = shallow(<Task left={left} right={right} />)
 
-  expect(
-    element
-      .find('.number')
-      .first()
-      .text(),
-  ).toBe(String(left))
-  expect(
-    element
-      .find('.number')
-      .last()
-      .text(),
-  ).toBe(String(right))
+  expect(element.find('.number').first().text()).toBe(String(left))
+  expect(element.find('.number').last().text()).toBe(String(right))
 })
