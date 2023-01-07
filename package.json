@@ -27,7 +27,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.2.1",
     "flow-bin": "0.196.3",
-    "prettier": "2.8.1",
+    "prettier": "2.8.2",
     "react-test-renderer": "18.2.0"
   },
   "scripts": {
