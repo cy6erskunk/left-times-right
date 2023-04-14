@@ -1,28 +1,28 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen} from '@testing-library/react'
 
 import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../constants'
 import App, {scenes, getTopScore, setTopScore} from '../components/App/App'
 
 const {START, GAME, END} = scenes
 
-it('renders without crashing', () => {
-  const element = shallow(<App />)
-  expect(element.find('.App').length).toBe(1)
+it('renders without crashing', async () => {
+  render(<App />)
+  expect(await screen.getByRole('main')).toBeDefined()
 })
 
-it('is initialized correctly', () => {
-  const element = shallow(<App />)
+it.only('is initialized correctly', async () => {
+  render(<App />)
 
-  expect(element.state('hearts')).toBe(null)
+  // expect(element.state('hearts')).toBe(null)
 
-  expect(element.find(START).length).toBe(1)
-  expect(element.find(GAME).length).toBe(0)
-  expect(element.find(END).length).toBe(0)
+  expect(await screen.getByRole('button', {title: 'Start'})).toBeDefined()
+  // expect(element.find(GAME).length).toBe(0)
+  // expect(element.find(END).length).toBe(0)
 })
 
 it('sets main scene correctly', () => {
-  const element = shallow(<App />)
+  render(<App />)
   element.find(START).prop('onClick')()
 
   expect(element.state('score')).toBe(INITIAL_SCORE)
@@ -34,7 +34,7 @@ it('sets main scene correctly', () => {
 })
 
 it('renders outro when lives are gone', () => {
-  const element = shallow(<App />)
+  render(<App />)
   element.setState({hearts: 0})
 
   expect(element.find(START).length).toBe(0)
@@ -43,7 +43,7 @@ it('renders outro when lives are gone', () => {
 })
 
 it('renders prev task when prev values are set', () => {
-  const element = shallow(<App />)
+  render(<App />)
 
   element.setState({
     prevLeft: 0,

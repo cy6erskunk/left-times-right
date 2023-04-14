@@ -164,7 +164,7 @@ class App extends React.Component<Props, State> {
   render(): React.Node {
     const {score, hearts} = this.state
     return (
-      <div className="App">
+      <main role="main" className="App">
         <React.StrictMode>
           {hearts === null ? (
             <StartScene onClick={this.goToGame} topScore={getTopScore()} />
@@ -174,7 +174,7 @@ class App extends React.Component<Props, State> {
             <EndScene score={score} onClick={this.goToGame} />
           )}
         </React.StrictMode>
-      </div>
+      </main>
     )
   }
 }
