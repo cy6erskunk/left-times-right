@@ -11,7 +11,7 @@ export const TaskInner = ({left, right}: Props): React.Element<'div'> => {
   }
 
   return (
-    <div className="task">
+    <div className="task" role="group">
       <span className="number">{left}</span>
       <span>{MILTIPLY_SIGN}</span>
       <span className="number">{right}</span>
