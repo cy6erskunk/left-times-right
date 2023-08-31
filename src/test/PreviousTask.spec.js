@@ -1,23 +1,24 @@
 import * as React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import {PreviousTaskInner as PreviousTask} from '../components/PreviousTask/PreviousTask'
 
 it('renders nothing if left prop is absent', () => {
-  const element = shallow(<PreviousTask right={1} />)
-  expect(element.html()).toBe(null)
+  render(<PreviousTask right={1} />)
+  expect(screen.queryByRole('group')).not.toBeInTheDocument()
 })
 
-it('renders nothing if right prop is absent', () => {
-  const element = shallow(<PreviousTask left={1} />)
-  expect(element.html()).toBe(null)
+test('renders nothing if right prop is absent', () => {
+  render(<PreviousTask left={1} />)
+  expect(screen.queryByRole('group')).not.toBeInTheDocument()
 })
 
-it('renders correctly', () => {
+test('renders correctly', () => {
   const left = 111
   const right = 999
-  const element = shallow(<PreviousTask left={left} right={right} />)
-  expect(element.html()).toContain(String(left))
-  expect(element.html()).toContain(String(right))
-  expect(element.html()).toContain(String(left * right))
+  render(<PreviousTask left={left} right={right} />)
+  expect(screen.getByRole('group').textContent).toContain(String(left))
+  expect(screen.getByRole('group').textContent).toContain(String(right))
+  expect(screen.getByRole('group').textContent).toContain(String(left * right))
 })
