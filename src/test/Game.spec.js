@@ -1,17 +1,16 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import {GameScene} from '../components/Game/Game'
-import Task from '../components/Task/Task'
-import PreviousTask from '../components/PreviousTask/PreviousTask'
 
-it('renders without crashing', () => {
-  const element = shallow(<GameScene />)
-  expect(element.find('.scores').length).toBe(1)
-  expect(element.find('.seconds').length).toBe(1)
-  expect(element.find('.score').length).toBe(1)
-  expect(element.find('.hearts').length).toBe(1)
-  expect(element.find(Task).length).toBe(1)
-  expect(element.find(PreviousTask).length).toBe(1)
-  expect(element.find('.userInput').length).toBe(1)
+test('renders without crashing', () => {
+  render(<GameScene left={0} right={0} />)
+  expect(screen.getByRole('group', {name: 'scores'})).toBeInTheDocument()
+  expect(screen.getByRole('timer')).toBeInTheDocument()
+  expect(screen.getByLabelText('score')).toBeInTheDocument()
+  expect(screen.getByLabelText('lives')).toBeInTheDocument()
+  expect(screen.getByLabelText('current task')).toBeInTheDocument()
+  expect(screen.queryByLabelText('previous task')).not.toBeInTheDocument()
+  expect(screen.queryByRole('textbox')).toBeInTheDocument()
 })

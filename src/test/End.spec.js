@@ -1,18 +1,18 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import EndScene from '../components/End/End'
 
-it('renders without crashing', () => {
-  const element = shallow(<EndScene />)
-  expect(element.find('.endScene').length).toBe(1)
-  expect(element.find('.restartButton').length).toBe(1)
-  expect(element.find('.finalScore').length).toBe(1)
-  expect(element.find('.finalScore').text()).toContain('0')
+test('renders without crashing', () => {
+  const {container, getByRole, getByLabelText} = render(<EndScene />)
+  expect(container.textContent).toContain('GAME OVER')
+  expect(getByRole('button', {name: 'restart'})).toBeInTheDocument()
+  expect(getByLabelText('final score')).toHaveTextContent('0')
 })
 
-it('renders provided score', () => {
+test('renders provided score', () => {
   const score = 123
-  const element = shallow(<EndScene score={score} />)
-  expect(element.find('.finalScore').text()).toContain(String(score))
+  render(<EndScene score={score} />)
+  expect(screen.getByLabelText('final score')).toHaveTextContent(String(score))
 })
