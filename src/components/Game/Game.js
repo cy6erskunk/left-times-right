@@ -43,7 +43,7 @@ export const GameScene = (props: Props): React.Node => {
           {props.score}
         </div>
         <div className="hearts" aria-label="lives">
-          {new Array(props.hearts).fill('❤️')}
+          {new Array<string>(props.hearts).fill('❤️')}
         </div>
       </div>
       <Task left={props.left} right={props.right} />
