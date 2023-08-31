@@ -3,9 +3,7 @@ import {render, screen, act} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../constants'
-import App, {scenes, getTopScore, setTopScore} from '../components/App/App'
-
-const {START, GAME, END} = scenes
+import App, {getTopScore, setTopScore} from '../components/App/App'
 
 test('renders without crashing', () => {
   render(<App />)

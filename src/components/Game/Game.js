@@ -39,8 +39,12 @@ export const GameScene = (props: Props): React.Node => {
           {':'}
           {props.secondsLeft}
         </div>
-        <div className="score" aria-label="score">{props.score}</div>
-        <div className="hearts" aria-label="lives">{new Array(props.hearts).fill('❤️')}</div>
+        <div className="score" aria-label="score">
+          {props.score}
+        </div>
+        <div className="hearts" aria-label="lives">
+          {new Array(props.hearts).fill('❤️')}
+        </div>
       </div>
       <Task left={props.left} right={props.right} />
       <input
