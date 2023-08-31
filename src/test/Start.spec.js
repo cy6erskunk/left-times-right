@@ -1,23 +1,24 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import StartScene from '../components/Start/Start'
 
-it('renders without crashing', () => {
-  const element = shallow(<StartScene />)
-  expect(element.find('.startScene').length).toBe(1)
-  expect(element.find('.startButton').length).toBe(1)
-  expect(element.find('.topScore').length).toBe(0)
+test('renders without crashing', () => {
+  render(<StartScene />)
+  expect(screen.getByRole('group')).toBeInTheDocument()
+  expect(screen.getByRole('button')).toBeInTheDocument()
+  expect(screen.queryByRole('img')).not.toBeInTheDocument()
 })
 
-it('renders propvided topscore', () => {
+test('renders propvided topscore', () => {
   const topScore = '123'
-  const element = shallow(<StartScene topScore={topScore} />)
-  expect(element.find('.topScore').text()).toContain(topScore)
+  render(<StartScene topScore={topScore} />)
+  expect(screen.queryAllByRole('img')[0].parentNode).toHaveTextContent(topScore)
 })
 
-it('skips incorrect topscore', () => {
+test('skips incorrect topscore', () => {
   const topScore = 'NaN'
-  const element = shallow(<StartScene topScore={topScore} />)
-  expect(element.find('.topScore').length).toBe(0)
+  render(<StartScene topScore={topScore} />)
+  expect(screen.queryByRole('img')).not.toBeInTheDocument()
 })
