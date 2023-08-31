@@ -1,54 +1,50 @@
 import React from 'react'
-import {shallow} from 'enzyme'
+import {render, screen, act} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
 import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../constants'
 import App, {scenes, getTopScore, setTopScore} from '../components/App/App'
 
 const {START, GAME, END} = scenes
 
-it('renders without crashing', () => {
-  const element = shallow(<App />)
-  expect(element.find('.App').length).toBe(1)
+test('renders without crashing', () => {
+  render(<App />)
+  expect(screen.getByRole('main')).toBeInTheDocument()
 })
 
-it('is initialized correctly', () => {
-  const element = shallow(<App />)
+test('is initialized correctly', () => {
+  const {getByLabelText, queryByLabelText} = render(<App />)
 
-  expect(element.state('hearts')).toBe(null)
-
-  expect(element.find(START).length).toBe(1)
-  expect(element.find(GAME).length).toBe(0)
-  expect(element.find(END).length).toBe(0)
+  expect(getByLabelText('start')).toBeInTheDocument()
+  expect(queryByLabelText('scores')).not.toBeInTheDocument()
+  expect(queryByLabelText('final score')).not.toBeInTheDocument()
 })
 
-it('sets main scene correctly', () => {
-  const element = shallow(<App />)
-  element.find(START).prop('onClick')()
+test('sets main scene correctly', () => {
+  render(<App />)
+  act(() => screen.getByRole('button').click())
 
-  expect(element.state('score')).toBe(INITIAL_SCORE)
-  expect(element.state('hearts')).toBe(INITIAL_HEARTS)
+  expect(screen.getByLabelText('score').textContent).toBe(String(INITIAL_SCORE))
+  expect(screen.queryByLabelText('lives').textContent.length).toBe(INITIAL_HEARTS * 2)
 
-  expect(element.find(START).length).toBe(0)
-  expect(element.find(GAME).length).toBe(1)
-  expect(element.find(END).length).toBe(0)
+  expect(screen.queryByLabelText('start')).not.toBeInTheDocument()
+  expect(screen.getByLabelText('scores')).toBeInTheDocument()
+  expect(screen.queryByLabelText('final score')).not.toBeInTheDocument()
 })
 
 it('renders outro when lives are gone', () => {
-  const element = shallow(<App />)
-  element.setState({hearts: 0})
+  jest.useFakeTimers()
 
-  expect(element.find(START).length).toBe(0)
-  expect(element.find(GAME).length).toBe(0)
-  expect(element.find(END).length).toBe(1)
-})
+  render(<App />)
+  act(() => screen.getByRole('button').click())
 
-it('renders prev task when prev values are set', () => {
-  const element = shallow(<App />)
+  act(() => jest.advanceTimersByTime(5000))
+  act(() => jest.advanceTimersByTime(5000))
+  act(() => jest.advanceTimersByTime(5000))
 
-  element.setState({
-    prevLeft: 0,
-    prevRight: 0,
-  })
+  expect(screen.queryByLabelText('start')).not.toBeInTheDocument()
+  expect(screen.queryByLabelText('scores')).not.toBeInTheDocument()
+  expect(screen.getByLabelText('final score')).toBeInTheDocument()
 })
 
 describe('getTopScore', () => {
