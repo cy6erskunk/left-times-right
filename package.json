@@ -21,7 +21,7 @@
     "@testing-library/jest-dom": "6.1.2",
     "@testing-library/react": "14.0.0",
     "eslint": "8.48.0",
-    "eslint-config-prettier": "8.6.0",
+    "eslint-config-prettier": "8.10.0",
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-flowtype": "8.0.3",
     "eslint-plugin-import": "2.27.5",
