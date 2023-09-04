@@ -5,7 +5,8 @@
     "eslint-config-react-app",
     "@cyberskunk",
     "@cyberskunk/eslint-config/node",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:compat/recommended"
   ],
   "plugins": [
     "prettier",
