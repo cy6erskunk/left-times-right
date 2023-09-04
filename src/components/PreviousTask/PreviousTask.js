@@ -10,7 +10,7 @@ type Props = {
 
 export const PreviousTaskInner = ({left, right}: Props): React.Element<'div'> | null =>
   left > Number.MIN_SAFE_INTEGER && right > Number.MIN_SAFE_INTEGER ? (
-    <div className="prevTask">
+    <div className="prevTask" role="group" aria-label="previous task">
       <span>{left}</span>
       <span>{MILTIPLY_SIGN}</span>
       <span>{right}</span>

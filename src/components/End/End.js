@@ -4,11 +4,11 @@ import * as React from 'react'
 const EndScene = ({score = 0, onClick}: {|score: number, onClick: () => void|}): React.Node => (
   <div className={'endScene'}>
     <div className={'gameOver'}>{'GAME OVER'}</div>
-    <div className={'finalScore'}>
+    <div className={'finalScore'} aria-label="final score">
       {'Score: '}
       {score}
     </div>
-    <button className={'restartButton'} onClick={onClick}>
+    <button className={'restartButton'} aria-label="restart" onClick={onClick}>
       {'RE-START'}
     </button>
   </div>
