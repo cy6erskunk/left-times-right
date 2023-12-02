@@ -20,7 +20,7 @@
     "@cyberskunk/eslint-config": "1.0.0",
     "@testing-library/jest-dom": "6.1.5",
     "@testing-library/react": "14.1.2",
-    "eslint": "8.54.0",
+    "eslint": "8.55.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-compat": "4.2.0",
     "eslint-plugin-flowtype": "8.0.3",
