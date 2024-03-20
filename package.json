@@ -13,9 +13,9 @@
   },
   "devDependencies": {
     "@babel/cli": "7.24.1",
-    "@babel/core": "7.24.1",
+    "@babel/core": "7.24.3",
     "@babel/eslint-parser": "7.24.1",
-    "@babel/preset-env": "7.24.1",
+    "@babel/preset-env": "7.24.3",
     "@babel/preset-flow": "7.24.1",
     "@cyberskunk/eslint-config": "1.0.0",
     "@testing-library/jest-dom": "6.4.2",
