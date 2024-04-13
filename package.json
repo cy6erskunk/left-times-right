@@ -19,7 +19,7 @@
     "@babel/preset-flow": "7.24.1",
     "@cyberskunk/eslint-config": "1.0.0",
     "@testing-library/jest-dom": "6.4.2",
-    "@testing-library/react": "14.3.1",
+    "@testing-library/react": "15.0.2",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-compat": "4.2.0",
