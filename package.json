@@ -12,11 +12,11 @@
     "react-scripts": "5.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.6",
-    "@babel/core": "7.24.6",
-    "@babel/eslint-parser": "7.24.6",
-    "@babel/preset-env": "7.24.6",
-    "@babel/preset-flow": "7.24.6",
+    "@babel/cli": "7.24.7",
+    "@babel/core": "7.24.7",
+    "@babel/eslint-parser": "7.24.7",
+    "@babel/preset-env": "7.24.7",
+    "@babel/preset-flow": "7.24.7",
     "@cyberskunk/eslint-config": "1.0.0",
     "@testing-library/jest-dom": "6.4.5",
     "@testing-library/react": "14.3.1",
