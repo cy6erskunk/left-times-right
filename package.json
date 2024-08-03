@@ -80,7 +80,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
-    "lint": "eslint -c .eslintrc ./src"
+    "lint": "eslint -c .eslintrc ./src",
+    "typecheck": "tsc --noEmit"
   },
   "jest": {
     "roots": [
