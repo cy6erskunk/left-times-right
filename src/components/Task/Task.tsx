@@ -1,18 +1,16 @@
-import * as React from 'react';
+import * as React from 'react'
 
 import {MILTIPLY_SIGN} from '../../constants'
 
 type Props = {
-  left: number,
+  left: number
   right: number
-};
+}
 
-export const TaskInner = (
-  {
-    left,
-    right,
-  }: Props,
-): React.ReactElement<React.ComponentProps<'div'>> => {
+export const TaskInner = ({
+  left,
+  right,
+}: Props): React.ReactElement<React.ComponentProps<'div'>> => {
   if (typeof left !== 'number' || typeof right !== 'number') {
     throw new Error('Invalid arguments')
   }

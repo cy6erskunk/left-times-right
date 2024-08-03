@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY, GAME_TIMEOUT_IN_MS} from '../../constants'
 import {generateDigit} from '../../helpers'
@@ -24,21 +24,17 @@ export const scenes = {
   END: EndScene,
 } as const
 
-type Props = Record<any, any>;
+type Props = Record<any, any>
 type State = {
-  left: number,
-  right: number,
-  prevLeft: number,
-  prevRight: number,
-  score: number,
-  showEmoji: boolean,
-  isLove: boolean,
+  left: number
+  right: number
+  prevLeft: number
+  prevRight: number
+  score: number
+  showEmoji: boolean
+  isLove: boolean
   hearts: number | null | undefined
-};
-
-// type ReactObjRef<ElementType extends React.ElementType> = {
-//   current: null | React.ElementRef<ElementType>
-// };
+}
 
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -63,9 +59,9 @@ class App extends React.Component<Props, State> {
     }
   }
 
-  timer: NodeJS.Timeout | null = null;
-  inputRef: React.RefObject<HTMLInputElement>;
-  emojiRef: React.RefObject<HTMLDivElement>;
+  timer: number | null = null
+  inputRef: React.RefObject<HTMLInputElement>
+  emojiRef: React.RefObject<HTMLDivElement>
 
   goToGame: () => void = () => {
     this.setState({
@@ -73,9 +69,9 @@ class App extends React.Component<Props, State> {
       score: 0,
       showEmoji: false,
     })
-  };
+  }
 
-  getValue: () => number = () => parseInt(this.inputRef?.current?.value || '0', 10);
+  getValue: () => number = () => parseInt(this.inputRef?.current?.value || '0', 10)
 
   updateScore: () => void = () =>
     this.setState((state) => {
@@ -106,26 +102,26 @@ class App extends React.Component<Props, State> {
           showEmoji: false,
         }
       }
-    }, this.resetInput);
+    }, this.resetInput)
 
   resetInput: () => void = () => {
     if (this.inputRef && this.inputRef.current) {
       this.inputRef.current.value = ''
     }
-  };
+  }
 
   onFocus: () => void = () => {
     window.scrollTo(0, 0)
     if (document.body) {
       document.body.scrollTop = 0
     }
-  };
+  }
 
   onSubmitTask: (e: Event) => void = (e: Event) => {
     if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
       this.updateScore()
     }
-  };
+  }
 
   onAnimationEnd: () => void = () => {
     if (this.emojiRef && this.emojiRef.current) {
@@ -134,7 +130,7 @@ class App extends React.Component<Props, State> {
     this.setState({
       showEmoji: false,
     })
-  };
+  }
 
   renderGameScene: () => React.ReactElement = () => {
     const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
@@ -142,7 +138,7 @@ class App extends React.Component<Props, State> {
       clearTimeout(this.timer)
       this.timer = null
     }
-    this.timer = setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
+    this.timer = window.setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
     return (
       <GameScene
         key={[left, right, score].join('-')}
@@ -161,7 +157,7 @@ class App extends React.Component<Props, State> {
         onFocus={this.onFocus}
       />
     )
-  };
+  }
 
   render(): React.ReactElement {
     const {score, hearts} = this.state
