@@ -1,31 +1,31 @@
-// @flow
 import * as React from 'react'
+// @ts-ignore
 import {NumericInput} from 'numeric-keyboard/dist/numeric_keyboard.react'
 
 import {CORRECT_ANSWER_EMOJI, INCORRECT_ANSWER_EMOJI, SECOND_IN_MS} from '../../constants'
 import Task from '../Task/Task'
 import PreviousTask from '../PreviousTask/PreviousTask'
 
-type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
+type ExternalProps = {
+  score: number
+  hearts: number
+  left: number
+  right: number
+  prevLeft: number
+  prevRight: number
+  onSubmitTask: (e: Event) => void
+  onFocus: () => void
+  onAnimationEnd: () => void
+  inputRef: React.RefObject<HTMLInputElement>
+  emojiRef: React.RefObject<HTMLDivElement>
+  showEmoji: boolean
+  isLove: boolean
+}
 
-type ExternalProps = {|
-  score: number,
-  hearts: number,
-  left: number,
-  right: number,
-  prevLeft: number,
-  prevRight: number,
-  onSubmitTask: (e: Event) => void,
-  onFocus: () => void,
-  onAnimationEnd: () => void,
-  inputRef: ReactObjRef<'input'>,
-  emojiRef: React.Ref<'div'>,
-  showEmoji: boolean,
-  isLove: boolean,
-|}
-
-type Props = {|...ExternalProps, secondsLeft: number|}
-export const GameScene = (props: Props): React.Node => {
+type Props = ExternalProps & {
+  secondsLeft: number
+}
+export const GameScene = (props: Props): React.ReactElement => {
   function onInput(value: string) {
     if (props.inputRef.current) {
       props.inputRef.current.value = value
@@ -73,9 +73,9 @@ export const GameScene = (props: Props): React.Node => {
   )
 }
 
-type State = {|
-  secondsLeft: number,
-|}
+type State = {
+  secondsLeft: number
+}
 class StatefulGameScene extends React.Component<ExternalProps, State> {
   state: State = {secondsLeft: 5}
 
@@ -88,10 +88,10 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
     }
   }
 
-  secondsTimeoutId: ?TimeoutID = null
+  secondsTimeoutId: number | null = null
 
   scheduleSecondsUpdate: () => void = () => {
-    this.secondsTimeoutId = setTimeout(this.updateSeconds, SECOND_IN_MS)
+    this.secondsTimeoutId = window.setTimeout(this.updateSeconds, SECOND_IN_MS)
   }
 
   updateSeconds: () => void = () => {
@@ -103,7 +103,7 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
     )
   }
 
-  render(): React.Element<typeof GameScene> {
+  render(): React.ReactElement<React.ComponentProps<typeof GameScene>> {
     return <GameScene secondsLeft={this.state.secondsLeft} {...this.props} />
   }
 }

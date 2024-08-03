@@ -1,12 +1,18 @@
-// @flow
 import * as React from 'react'
 
 import {logError} from '../../helpers'
 import type {ErrorInfo} from '../../types'
 
-type State = {|hasError: boolean|}
+type State = {
+  hasError: boolean
+}
 
-class ErrorBoundary extends React.Component<{children: React.Node}, State> {
+class ErrorBoundary extends React.Component<
+  {
+    children: React.ReactNode
+  },
+  State
+> {
   state: State = {hasError: false}
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
@@ -16,7 +22,7 @@ class ErrorBoundary extends React.Component<{children: React.Node}, State> {
 
   clickButton: () => void = () => window.location.reload()
 
-  render(): React.Node {
+  render(): React.ReactNode {
     if (this.state.hasError) {
       return (
         <div className={'fatalError'}>

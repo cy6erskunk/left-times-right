@@ -1,11 +1,16 @@
-// @flow
 import * as React from 'react'
 
 import {MILTIPLY_SIGN} from '../../constants'
 
-type Props = {|left: number, right: number|}
+type Props = {
+  left: number
+  right: number
+}
 
-export const TaskInner = ({left, right}: Props): React.Element<'div'> => {
+export const TaskInner = ({
+  left,
+  right,
+}: Props): React.ReactElement<React.ComponentProps<'div'>> => {
   if (typeof left !== 'number' || typeof right !== 'number') {
     throw new Error('Invalid arguments')
   }
@@ -19,5 +24,5 @@ export const TaskInner = ({left, right}: Props): React.Element<'div'> => {
   )
 }
 
-const Memoized: React$ComponentType<Props> = React.memo(TaskInner)
+const Memoized: React.ComponentType<Props> = React.memo(TaskInner)
 export default Memoized

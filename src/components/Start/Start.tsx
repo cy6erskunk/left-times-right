@@ -1,11 +1,13 @@
-// @flow
 import * as React from 'react'
 
 const CROWN = '👑'
 
-type StartSceneProps = {|onClick: () => void, topScore: ?string|}
+type StartSceneProps = {
+  onClick: () => void
+  topScore: string | null | undefined
+}
 
-const StartScene = (props: StartSceneProps): React.Element<'div'> => (
+const StartScene = (props: StartSceneProps): React.ReactElement<React.ComponentProps<'div'>> => (
   <div className={'startScene'} role="group" aria-label="start">
     <button onClick={props.onClick} className={'startButton'}>
       {'START'}

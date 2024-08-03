@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 
 import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY, GAME_TIMEOUT_IN_MS} from '../../constants'
@@ -23,21 +22,19 @@ export const scenes = {
   START: StartScene,
   GAME: GameScene,
   END: EndScene,
+} as const
+
+type Props = Record<any, any>
+type State = {
+  left: number
+  right: number
+  prevLeft: number
+  prevRight: number
+  score: number
+  showEmoji: boolean
+  isLove: boolean
+  hearts: number | null | undefined
 }
-
-type Props = {||}
-type State = {|
-  left: number,
-  right: number,
-  prevLeft: number,
-  prevRight: number,
-  score: number,
-  showEmoji: boolean,
-  isLove: boolean,
-  hearts: ?number,
-|}
-
-type ReactObjRef<ElementType: React.ElementType> = {current: null | React.ElementRef<ElementType>}
 
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -55,16 +52,16 @@ class App extends React.Component<Props, State> {
       right: generateDigit(),
       prevLeft: -Infinity,
       prevRight: -Infinity,
-      score: parseInt(localStorage.getItem('score'), 10),
+      score: parseInt(localStorage.getItem('score') || '0', 10),
       showEmoji: false,
       isLove: true,
       hearts: null,
     }
   }
 
-  timer: ?TimeoutID = null
-  inputRef: ReactObjRef<'input'>
-  emojiRef: ReactObjRef<'div'>
+  timer: number | null = null
+  inputRef: React.RefObject<HTMLInputElement>
+  emojiRef: React.RefObject<HTMLDivElement>
 
   goToGame: () => void = () => {
     this.setState({
@@ -74,14 +71,14 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  getValue: () => number = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10)
+  getValue: () => number = () => parseInt(this.inputRef?.current?.value || '0', 10)
 
   updateScore: () => void = () =>
     this.setState((state) => {
       const newState = {
         left: generateDigit(),
         right: generateDigit(),
-      }
+      } as const
       const isLove = state.left * state.right === this.getValue()
 
       const newScore = isLove ? state.score + 1 : state.score
@@ -99,6 +96,7 @@ class App extends React.Component<Props, State> {
         setTopScore(String(newScore))
         return {
           ...newState,
+          isLove: false,
           score: newScore,
           hearts: 0,
           showEmoji: false,
@@ -134,13 +132,13 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  renderGameScene: () => React.Node = () => {
+  renderGameScene: () => React.ReactElement = () => {
     const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
     if (this.timer) {
       clearTimeout(this.timer)
       this.timer = null
     }
-    this.timer = setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
+    this.timer = window.setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
     return (
       <GameScene
         key={[left, right, score].join('-')}
@@ -161,7 +159,7 @@ class App extends React.Component<Props, State> {
     )
   }
 
-  render(): React.Node {
+  render(): React.ReactElement {
     const {score, hearts} = this.state
     return (
       <div className="App" role="main">

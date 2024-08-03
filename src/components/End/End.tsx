@@ -1,7 +1,12 @@
-// @flow
 import * as React from 'react'
 
-const EndScene = ({score = 0, onClick}: {|score: number, onClick: () => void|}): React.Node => (
+const EndScene = ({
+  score = 0,
+  onClick,
+}: {
+  score: number
+  onClick: () => void
+}): React.ReactElement => (
   <div className={'endScene'}>
     <div className={'gameOver'}>{'GAME OVER'}</div>
     <div className={'finalScore'} aria-label="final score">

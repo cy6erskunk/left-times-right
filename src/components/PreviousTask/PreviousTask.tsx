@@ -1,14 +1,16 @@
-// @flow
 import * as React from 'react'
 
 import {MILTIPLY_SIGN, EQUALS_SIGN} from '../../constants'
 
 type Props = {
-  left: number,
-  right: number,
+  left: number
+  right: number
 }
 
-export const PreviousTaskInner = ({left, right}: Props): React.Element<'div'> | null =>
+export const PreviousTaskInner = ({
+  left,
+  right,
+}: Props): React.ReactElement<React.ComponentProps<'div'>> | null =>
   left > Number.MIN_SAFE_INTEGER && right > Number.MIN_SAFE_INTEGER ? (
     <div className="prevTask" role="group" aria-label="previous task">
       <span>{left}</span>
@@ -19,5 +21,5 @@ export const PreviousTaskInner = ({left, right}: Props): React.Element<'div'> | 
     </div>
   ) : null
 
-const Memoized: React$ComponentType<Props> = React.memo(PreviousTaskInner)
+const Memoized: React.ComponentType<Props> = React.memo(PreviousTaskInner)
 export default Memoized

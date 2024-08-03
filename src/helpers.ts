@@ -1,4 +1,3 @@
-// @flow
 import {MIN_NUMBER, MAX_NUMBER} from './constants'
 import type {ErrorInfo} from './types'
 

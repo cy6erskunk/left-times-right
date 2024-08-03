@@ -1,4 +1,3 @@
-// @flow
 export const MILTIPLY_SIGN = 'x'
 export const EQUALS_SIGN = '='
 export const MIN_NUMBER = 2
