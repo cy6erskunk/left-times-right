@@ -36,9 +36,9 @@ type State = {
   hearts: number | null | undefined
 };
 
-type ReactObjRef<ElementType extends React.ElementType> = {
-  current: null | React.ElementRef<ElementType>
-};
+// type ReactObjRef<ElementType extends React.ElementType> = {
+//   current: null | React.ElementRef<ElementType>
+// };
 
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -56,16 +56,16 @@ class App extends React.Component<Props, State> {
       right: generateDigit(),
       prevLeft: -Infinity,
       prevRight: -Infinity,
-      score: parseInt(localStorage.getItem('score'), 10),
+      score: parseInt(localStorage.getItem('score') || '0', 10),
       showEmoji: false,
       isLove: true,
       hearts: null,
     }
   }
 
-  timer: number | null | undefined = null;
-  inputRef: ReactObjRef<'input'>;
-  emojiRef: ReactObjRef<'div'>;
+  timer: NodeJS.Timeout | null = null;
+  inputRef: React.RefObject<HTMLInputElement>;
+  emojiRef: React.RefObject<HTMLDivElement>;
 
   goToGame: () => void = () => {
     this.setState({
@@ -75,7 +75,7 @@ class App extends React.Component<Props, State> {
     })
   };
 
-  getValue: () => number = () => parseInt(this.inputRef.current && this.inputRef.current.value, 10);
+  getValue: () => number = () => parseInt(this.inputRef?.current?.value || '0', 10);
 
   updateScore: () => void = () =>
     this.setState((state) => {
@@ -100,6 +100,7 @@ class App extends React.Component<Props, State> {
         setTopScore(String(newScore))
         return {
           ...newState,
+          isLove: false,
           score: newScore,
           hearts: 0,
           showEmoji: false,

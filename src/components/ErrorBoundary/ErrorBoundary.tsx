@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component<{
 
   clickButton: () => void = () => window.location.reload();
 
-  render(): React.ReactElement {
+  render(): React.ReactNode {
     if (this.state.hasError) {
       return (
         <div className={'fatalError'}>

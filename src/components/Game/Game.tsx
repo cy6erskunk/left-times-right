@@ -1,4 +1,5 @@
 import * as React from 'react';
+// @ts-ignore
 import {NumericInput} from 'numeric-keyboard/dist/numeric_keyboard.react'
 
 import {CORRECT_ANSWER_EMOJI, INCORRECT_ANSWER_EMOJI, SECOND_IN_MS} from '../../constants'
@@ -19,8 +20,8 @@ type ExternalProps = {
   onSubmitTask: (e: Event) => void,
   onFocus: () => void,
   onAnimationEnd: () => void,
-  inputRef: ReactObjRef<'input'>,
-  emojiRef: React.Ref<'div'>,
+  inputRef: React.RefObject<HTMLInputElement>,
+  emojiRef: React.RefObject<HTMLDivElement>,
   showEmoji: boolean,
   isLove: boolean
 };
@@ -89,7 +90,7 @@ class StatefulGameScene extends React.Component<ExternalProps, State> {
     }
   };
 
-  secondsTimeoutId: number | null | undefined = null;
+  secondsTimeoutId: NodeJS.Timeout | null = null;
 
   scheduleSecondsUpdate: () => void = () => {
     this.secondsTimeoutId = setTimeout(this.updateSeconds, SECOND_IN_MS)
