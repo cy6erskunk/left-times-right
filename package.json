@@ -8,7 +8,7 @@
   "dependencies": {
     "@babel/core": "7.25.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.15",
-    "@svgr/webpack": "5.5.0",
+    "@svgr/webpack": "8.1.0",
     "babel-jest": "27.5.1",
     "babel-loader": "8.3.0",
     "babel-plugin-named-asset-import": "0.3.8",
