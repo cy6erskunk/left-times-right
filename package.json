@@ -55,7 +55,7 @@
     "webpack": "5.88.2",
     "webpack-dev-server": "4.10.0",
     "webpack-manifest-plugin": "4.1.1",
-    "workbox-webpack-plugin": "6.5.4"
+    "workbox-webpack-plugin": "6.6.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
