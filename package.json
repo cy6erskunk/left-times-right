@@ -47,7 +47,7 @@
     "resolve-url-loader": "5.0.0",
     "sass-loader": "16.0.1",
     "semver": "7.6.3",
-    "source-map-loader": "3.0.2",
+    "source-map-loader": "5.0.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.10",
     "webpack": "5.93.0",
