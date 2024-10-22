@@ -56,10 +56,10 @@
     "workbox-webpack-plugin": "7.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.25.7",
-    "@babel/core": "7.25.8",
-    "@babel/eslint-parser": "7.25.8",
-    "@babel/preset-env": "7.25.8",
+    "@babel/cli": "7.25.9",
+    "@babel/core": "7.25.9",
+    "@babel/eslint-parser": "7.25.9",
+    "@babel/preset-env": "7.25.9",
     "@cyberskunk/eslint-config": "1.0.0",
     "@testing-library/jest-dom": "6.6.2",
     "@testing-library/react": "16.0.1",
