@@ -101,28 +101,31 @@ export default function (proxy, allowedHost) {
     },
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,
-    setupMiddlewares: (middlewares, devServer) => {
-      // Keep `evalSourceMapMiddleware` before other middlewares
-      devServer.app.use(evalSourceMapMiddleware(devServer));
-    
-      if (fs.existsSync(paths.proxySetup)) {
-        // This registers user provided middleware for proxy reasons
-        require(paths.proxySetup)(devServer.app);
-      }
-    
-      // Use the middlewares array to maintain correct order
-      middlewares.push({
-        name: 'redirect-public-path',
-        middleware: redirectServedPath(paths.publicUrlOrPath)
-      });
-    
-      // Add noop service worker middleware
-      middlewares.push({
-        name: 'noop-service-worker',
-        middleware: noopServiceWorkerMiddleware(paths.publicUrlOrPath)
-      });
-    
-      return middlewares;
-    },
+    // ******
+    // TODO: figure out why it crashes everything
+    // ******
+    // setupMiddlewares: (middlewares, devServer) => {
+    //   // Keep `evalSourceMapMiddleware` before other middlewares
+    //   devServer.app.use(evalSourceMapMiddleware(devServer));
+
+    //   if (fs.existsSync(paths.proxySetup)) {
+    //     // This registers user provided middleware for proxy reasons
+    //     require(paths.proxySetup)(devServer.app);
+    //   }
+
+    //   // Use the middlewares array to maintain correct order
+    //   middlewares.push({
+    //     name: 'redirect-public-path',
+    //     middleware: redirectServedPath(paths.publicUrlOrPath)
+    //   });
+
+    //   // Add noop service worker middleware
+    //   middlewares.push({
+    //     name: 'noop-service-worker',
+    //     middleware: noopServiceWorkerMiddleware(paths.publicUrlOrPath)
+    //   });
+
+    //   return middlewares;
+    // },
   };
 };
