@@ -12,27 +12,27 @@ process.on('unhandledRejection', err => {
 });
 
 // Ensure environment variables are read.
-require('../config/env');
+await import('../config/env.js');
 
-const fs = require('fs');
-const chalk = require('react-dev-utils/chalk');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const clearConsole = require('react-dev-utils/clearConsole');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const {
+import * as fs from 'fs';
+import chalk from 'react-dev-utils/chalk.js';
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import clearConsole from 'react-dev-utils/clearConsole.js';
+import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles.js';
+import {
   choosePort,
   createCompiler,
   prepareProxy,
   prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
-const semver = require('semver');
-const paths = require('../config/paths');
-const configFactory = require('../config/webpack.config');
-const createDevServerConfig = require('../config/webpackDevServer.config');
-const getClientEnvironment = require('../config/env');
-const react = require(require.resolve('react', { paths: [paths.appPath] }));
+} from 'react-dev-utils/WebpackDevServerUtils.js';
+import openBrowser from 'react-dev-utils/openBrowser.js';
+import * as semver from 'semver';
+import * as paths from '../config/paths.js';
+import configFactory from '../config/webpack.config.js';
+import createDevServerConfig from '../config/webpackDevServer.config.js';
+const {getClientEnvironment} = await import('../config/env.js');
+import * as react from 'react';
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 const useYarn = fs.existsSync(paths.yarnLockFile);
@@ -66,7 +66,9 @@ if (process.env.HOST) {
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require('react-dev-utils/browsersHelper');
+const { checkBrowsers } = await import('react-dev-utils/browsersHelper.js');
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // We attempt to use the default port but if it is busy, we offer the user to
@@ -127,7 +129,7 @@ checkBrowsers(paths.appPath, isInteractive)
         );
       }
 
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log(chalk.cyan(`Starting the development server)...\n`));
       openBrowser(urls.localUrlForBrowser);
     });
 
