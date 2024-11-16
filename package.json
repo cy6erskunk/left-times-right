@@ -1,5 +1,6 @@
 {
   "name": "left-times-right",
+  "type": "module",
   "version": "0.1.0",
   "description": "",
   "keywords": [],
