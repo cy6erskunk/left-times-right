@@ -1,8 +1,8 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
-const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
+import * as path from 'path';
+import * as fs from 'fs';
+import getPublicUrlOrPath from 'react-dev-utils/getPublicUrlOrPath.js';
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
@@ -15,9 +15,11 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // single-page apps that may serve index.html for nested URLs like /todos/42.
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
+const package_json = await import(resolveApp('package.json'), { assert: { type: 'json' } });
+const jsonData = package_json.default;
 const publicUrlOrPath = getPublicUrlOrPath(
   process.env.NODE_ENV === 'development',
-  require(resolveApp('package.json')).homepage,
+  jsonData.homepage,
   process.env.PUBLIC_URL
 );
 
@@ -50,28 +52,42 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
-// config after eject: we're in ./config/
-module.exports = {
-  dotenv: resolveApp('.env'),
-  appPath: resolveApp('.'),
-  appBuild: resolveApp(buildPath),
-  appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveModule(resolveApp, 'src/index'),
-  appPackageJson: resolveApp('package.json'),
-  appSrc: resolveApp('src'),
-  appTsConfig: resolveApp('tsconfig.json'),
-  appJsConfig: resolveApp('jsconfig.json'),
-  yarnLockFile: resolveApp('yarn.lock'),
-  testsSetup: resolveModule(resolveApp, 'src/setupTests'),
-  proxySetup: resolveApp('src/setupProxy.js'),
-  appNodeModules: resolveApp('node_modules'),
-  appWebpackCache: resolveApp('node_modules/.cache'),
-  appTsBuildInfoFile: resolveApp('node_modules/.cache/tsconfig.tsbuildinfo'),
-  swSrc: resolveModule(resolveApp, 'src/service-worker'),
+  const dotenv = resolveApp('.env');
+  const appPath= resolveApp('.');
+  const appBuild = resolveApp(buildPath);
+  const appPublic = resolveApp('public');
+  const appHtml = resolveApp('public/index.html');
+  const appIndexJs = resolveModule(resolveApp, 'src/index');
+  const appPackageJson = resolveApp('package.json');
+  const appSrc = resolveApp('src');
+  const appTsConfig = resolveApp('tsconfig.json');
+  const appJsConfig = resolveApp('jsconfig.json');
+  const yarnLockFile = resolveApp('yarn.lock');
+  const testsSetup = resolveModule(resolveApp, 'src/setupTests');
+  const proxySetup = resolveApp('src/setupProxy.js');
+  const appNodeModules = resolveApp('node_modules');
+  const appWebpackCache = resolveApp('node_modules/.cache');
+  const appTsBuildInfoFile = resolveApp('node_modules/.cache/tsconfig.tsbuildinfo');
+  const swSrc = resolveModule(resolveApp, 'src/service-worker');
+
+export {
+  dotenv,
+  appPath,
+  appBuild,
+  appPublic,
+  appHtml,
+  appIndexJs,
+  appPackageJson,
+  appSrc,
+  appTsConfig,
+  appJsConfig,
+  yarnLockFile,
+  testsSetup,
+  proxySetup,
+  appNodeModules,
+  appWebpackCache,
+  appTsBuildInfoFile,
+  swSrc,
   publicUrlOrPath,
+  moduleFileExtensions
 };
-
-
-
-module.exports.moduleFileExtensions = moduleFileExtensions;

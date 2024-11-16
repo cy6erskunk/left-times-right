@@ -1,5 +1,22 @@
 'use strict';
 
+import * as path from 'path';
+import chalk from 'react-dev-utils/chalk.js';
+import * as fs from 'fs';
+import fse from 'fs-extra';
+import * as bfj from 'bfj';
+import webpack from 'webpack';
+import configFactory from '../config/webpack.config.js';
+import * as paths from '../config/paths.js';
+import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles.js';
+import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages.js';
+import printHostingInstructions from 'react-dev-utils/printHostingInstructions.js';
+import * as FileSizeReporter from 'react-dev-utils/FileSizeReporter.js';
+import printBuildError from 'react-dev-utils/printBuildError.js';
+import { clientEnvironment } from '../config/env.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
@@ -12,20 +29,7 @@ process.on('unhandledRejection', err => {
 });
 
 // Ensure environment variables are read.
-require('../config/env');
-
-const path = require('path');
-const chalk = require('react-dev-utils/chalk');
-const fs = require('fs-extra');
-const bfj = require('bfj');
-const webpack = require('webpack');
-const configFactory = require('../config/webpack.config');
-const paths = require('../config/paths');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const printBuildError = require('react-dev-utils/printBuildError');
+clientEnvironment();
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -51,7 +55,7 @@ const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require('react-dev-utils/browsersHelper');
+import { checkBrowsers } from 'react-dev-utils/browsersHelper.js';
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // First, read the current file sizes in build directory.
@@ -61,7 +65,7 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    fse.emptyDirSync(paths.appBuild);
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
@@ -74,13 +78,13 @@ checkBrowsers(paths.appPath, isInteractive)
         console.log(warnings.join('\n\n'));
         console.log(
           '\nSearch for the ' +
-            chalk.underline(chalk.yellow('keywords')) +
-            ' to learn more about each warning.'
+          chalk.underline(chalk.yellow('keywords')) +
+          ' to learn more about each warning.'
         );
         console.log(
           'To ignore, add ' +
-            chalk.cyan('// eslint-disable-next-line') +
-            ' to the line before.\n'
+          chalk.cyan('// eslint-disable-next-line') +
+          ' to the line before.\n'
         );
       } else {
         console.log(chalk.green('Compiled successfully.\n'));
@@ -184,7 +188,7 @@ function build(previousFileSizes) {
           console.log(
             chalk.yellow(
               '\nTreating warnings as errors because process.env.CI = true.\n' +
-                'Most CI servers set it automatically.\n'
+              'Most CI servers set it automatically.\n'
             )
           );
           return reject(new Error(filteredWarnings.join('\n\n')));
@@ -210,7 +214,7 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  fse.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });
