@@ -10,10 +10,12 @@ import configFactory from '../config/webpack.config.js';
 import * as paths from '../config/paths.js';
 import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles.js';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages.js';
-import * as printHostingInstructions from 'react-dev-utils/printHostingInstructions.js';
+import printHostingInstructions from 'react-dev-utils/printHostingInstructions.js';
 import * as FileSizeReporter from 'react-dev-utils/FileSizeReporter.js';
 import printBuildError from 'react-dev-utils/printBuildError.js';
 import { clientEnvironment } from '../config/env.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
