@@ -1,32 +1,41 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const webpack = require('webpack');
-const resolve = require('resolve');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const paths = require('./paths');
-const modules = require('./modules');
-const getClientEnvironment = require('./env');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin =
-  process.env.TSC_COMPILE_ON_ERROR === 'true'
-    ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
-    : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+import * as fs from 'fs';
+import * as path from 'path';
+import webpack from 'webpack';
+import resolve from 'resolve';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import InlineChunkHtmlPlugin from 'react-dev-utils/InlineChunkHtmlPlugin.js';
+import TerserPlugin from 'terser-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
+import InterpolateHtmlPlugin from 'react-dev-utils/InterpolateHtmlPlugin.js';
+import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
+import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin.js';
+import * as getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent.js';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import * as paths from './paths.js';
+import * as modules from './modules.js';
+import ModuleNotFoundPlugin from 'react-dev-utils/ModuleNotFoundPlugin.js';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import createEnvironmentHash from './webpack/persistentCache/createEnvironmentHash.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const {getClientEnvironment} = await import('./env.js');
+const _ForkTsCheckerWarningWebpackPlugin = await import('react-dev-utils/ForkTsCheckerWarningWebpackPlugin.js');
+const _ForkTsCheckerWebpackPlugin = await import('react-dev-utils/ForkTsCheckerWebpackPlugin.js');
+const ForkTsCheckerWebpackPlugin  =
+  process.env.TSC_COMPILE_ON_ERROR === 'true'
+    ? _ForkTsCheckerWarningWebpackPlugin.default
+    : _ForkTsCheckerWebpackPlugin.default;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -87,7 +96,7 @@ const hasJsxRuntime = (() => {
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+export default function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 

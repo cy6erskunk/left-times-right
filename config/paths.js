@@ -89,4 +89,5 @@ export {
   appTsBuildInfoFile,
   swSrc,
   publicUrlOrPath,
+  moduleFileExtensions
 };
