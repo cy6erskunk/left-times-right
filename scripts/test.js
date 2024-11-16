@@ -13,8 +13,8 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 // Ensure environment variables are read.
-await import('../config/env.js');
-
+import { clientEnvironment } from '../config/env.js';
+clientEnvironment();
 
 let argv = process.argv.slice(2);
 

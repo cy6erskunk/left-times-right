@@ -3,6 +3,7 @@
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -12,7 +13,7 @@ process.on('unhandledRejection', err => {
 });
 
 // Ensure environment variables are read.
-await import('../config/env.js');
+import { clientEnvironment, getClientEnvironment } from '../config/env.js';
 
 import * as fs from 'fs';
 import chalk from 'react-dev-utils/chalk.js';
@@ -31,8 +32,9 @@ import * as semver from 'semver';
 import * as paths from '../config/paths.js';
 import configFactory from '../config/webpack.config.js';
 import createDevServerConfig from '../config/webpackDevServer.config.js';
-const {getClientEnvironment} = await import('../config/env.js');
 import * as react from 'react';
+
+clientEnvironment();
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 const useYarn = fs.existsSync(paths.yarnLockFile);
