@@ -36,13 +36,15 @@ export function clientEnvironment() {
   // https://github.com/motdotla/dotenv-expand
   dotenvFiles.forEach(dotenvFile => {
     if (fs.existsSync(dotenvFile)) {
-      require('dotenv-expand')(
+      const dotenvExpand = require('dotenv-expand').expand;
+      dotenvExpand(
         require('dotenv').config({
           path: dotenvFile,
         })
       );
     }
   });
+  console.log('BROOM!', process.env)
 
   // We support resolving modules according to `NODE_PATH`.
   // This lets you use absolute paths in imports inside large monorepos:
