@@ -44,7 +44,6 @@ export function clientEnvironment() {
       );
     }
   });
-  console.log('BROOM!', process.env)
 
   // We support resolving modules according to `NODE_PATH`.
   // This lets you use absolute paths in imports inside large monorepos:
