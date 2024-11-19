@@ -1,10 +1,14 @@
-import * as React from 'react'
 // @ts-ignore
-import {NumericInput} from 'numeric-keyboard/dist/numeric_keyboard.react'
+import { NumericInput } from 'numeric-keyboard/dist/numeric_keyboard.react'
+import * as React from 'react'
 
-import {CORRECT_ANSWER_EMOJI, INCORRECT_ANSWER_EMOJI, SECOND_IN_MS} from '../../constants'
-import Task from '../Task/Task'
+import {
+  CORRECT_ANSWER_EMOJI,
+  INCORRECT_ANSWER_EMOJI,
+  SECOND_IN_MS,
+} from '../../constants'
 import PreviousTask from '../PreviousTask/PreviousTask'
+import Task from '../Task/Task'
 
 type ExternalProps = {
   score: number
@@ -65,8 +69,14 @@ export const GameScene = (props: Props): React.ReactElement => {
       />
       <PreviousTask left={props.prevLeft} right={props.prevRight} />
       {props.showEmoji ? (
-        <div className="emoji" ref={props.emojiRef} onAnimationEnd={props.onAnimationEnd}>
-          <span role="img">{props.isLove ? CORRECT_ANSWER_EMOJI : INCORRECT_ANSWER_EMOJI}</span>
+        <div
+          className="emoji"
+          ref={props.emojiRef}
+          onAnimationEnd={props.onAnimationEnd}
+        >
+          <span role="img">
+            {props.isLove ? CORRECT_ANSWER_EMOJI : INCORRECT_ANSWER_EMOJI}
+          </span>
         </div>
       ) : null}
     </>
@@ -77,7 +87,7 @@ type State = {
   secondsLeft: number
 }
 class StatefulGameScene extends React.Component<ExternalProps, State> {
-  state: State = {secondsLeft: 5}
+  state: State = { secondsLeft: 5 }
 
   componentDidMount: () => void = () => {
     this.scheduleSecondsUpdate()

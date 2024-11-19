@@ -15,7 +15,6 @@ import InterpolateHtmlPlugin from 'react-dev-utils/InterpolateHtmlPlugin.js';
 import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
 import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin.js';
 import * as getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent.js';
-import ESLintPlugin from 'eslint-webpack-plugin';
 import * as paths from './paths.js';
 import * as modules from './modules.js';
 import ModuleNotFoundPlugin from 'react-dev-utils/ModuleNotFoundPlugin.js';
@@ -729,31 +728,6 @@ export default function (webpackEnv) {
         },
         logger: {
           infrastructure: 'silent',
-        },
-      }),
-      !disableESLintPlugin &&
-      new ESLintPlugin({
-        // Plugin options
-        extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
-        formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        eslintPath: require.resolve('eslint'),
-        failOnError: !(isEnvDevelopment && emitErrorsAsWarnings),
-        context: paths.appSrc,
-        cache: true,
-        cacheLocation: path.resolve(
-          paths.appNodeModules,
-          '.cache/.eslintcache'
-        ),
-        // ESLint class options
-        cwd: paths.appPath,
-        resolvePluginsRelativeTo: __dirname,
-        baseConfig: {
-          extends: [require.resolve('eslint-config-react-app/base')],
-          rules: {
-            ...(!hasJsxRuntime && {
-              'react/react-in-jsx-scope': 'error',
-            }),
-          },
         },
       }),
     ].filter(Boolean),

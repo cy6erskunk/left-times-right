@@ -1,13 +1,13 @@
+import { render, screen } from '@testing-library/react'
 import React from 'react'
-import {render, screen} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import EndScene from '../components/End/End'
 
 test('renders without crashing', () => {
-  const {container, getByRole, getByLabelText} = render(<EndScene />)
+  const { container, getByRole, getByLabelText } = render(<EndScene />)
   expect(container.textContent).toContain('GAME OVER')
-  expect(getByRole('button', {name: 'restart'})).toBeInTheDocument()
+  expect(getByRole('button', { name: 'restart' })).toBeInTheDocument()
   expect(getByLabelText('final score')).toHaveTextContent('0')
 })
 

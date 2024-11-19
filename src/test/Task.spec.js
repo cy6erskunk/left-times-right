@@ -1,9 +1,9 @@
+import { render, screen } from '@testing-library/react'
 import React from 'react'
-import {render, screen} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import {TaskInner as Task} from '../components/Task/Task'
-import {MILTIPLY_SIGN} from '../constants'
+import { TaskInner as Task } from '../components/Task/Task'
+import { MILTIPLY_SIGN } from '../constants'
 
 test('renders without crashing when valid arguments are provided', () => {
   render(<Task left={0} right={0} />)

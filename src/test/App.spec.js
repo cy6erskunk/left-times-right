@@ -1,9 +1,9 @@
+import { act, render, screen } from '@testing-library/react'
 import React from 'react'
-import {render, screen, act} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY} from '../constants'
-import App, {getTopScore, setTopScore} from '../components/App/App'
+import App, { getTopScore, setTopScore } from '../components/App/App'
+import { INITIAL_HEARTS, INITIAL_SCORE, TOP_SCORE_KEY } from '../constants'
 
 test('renders without crashing', () => {
   render(<App />)
@@ -11,7 +11,7 @@ test('renders without crashing', () => {
 })
 
 test('is initialized correctly', () => {
-  const {getByLabelText, queryByLabelText} = render(<App />)
+  const { getByLabelText, queryByLabelText } = render(<App />)
 
   expect(getByLabelText('start')).toBeInTheDocument()
   expect(queryByLabelText('scores')).not.toBeInTheDocument()
@@ -23,7 +23,9 @@ test('sets main scene correctly', () => {
   act(() => screen.getByRole('button').click())
 
   expect(screen.getByLabelText('score').textContent).toBe(String(INITIAL_SCORE))
-  expect(screen.queryByLabelText('lives').textContent.length).toBe(INITIAL_HEARTS * 2)
+  expect(screen.queryByLabelText('lives').textContent.length).toBe(
+    INITIAL_HEARTS * 2,
+  )
 
   expect(screen.queryByLabelText('start')).not.toBeInTheDocument()
   expect(screen.getByLabelText('scores')).toBeInTheDocument()

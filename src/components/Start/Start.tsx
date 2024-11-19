@@ -7,7 +7,9 @@ type StartSceneProps = {
   topScore: string | null | undefined
 }
 
-const StartScene = (props: StartSceneProps): React.ReactElement<React.ComponentProps<'div'>> => (
+const StartScene = (
+  props: StartSceneProps,
+): React.ReactElement<React.ComponentProps<'div'>> => (
   <div className={'startScene'} role="group" aria-label="start">
     <button onClick={props.onClick} className={'startButton'}>
       {'START'}

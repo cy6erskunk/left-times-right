@@ -22,9 +22,6 @@
     "css-minimizer-webpack-plugin": "7.0.0",
     "dotenv": "16.4.5",
     "dotenv-expand": "12.0.1",
-    "eslint": "8.57.1",
-    "eslint-config-react-app": "7.0.1",
-    "eslint-webpack-plugin": "4.2.0",
     "file-loader": "6.2.0",
     "fs-extra": "11.2.0",
     "html-webpack-plugin": "5.6.3",
@@ -59,18 +56,12 @@
   "devDependencies": {
     "@babel/cli": "7.25.9",
     "@babel/core": "7.26.0",
-    "@babel/eslint-parser": "7.25.9",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@babel/preset-env": "7.26.0",
-    "@cyberskunk/eslint-config": "1.0.0",
+    "@biomejs/biome": "1.9.4",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.0.1",
-    "eslint": "8.57.1",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-compat": "4.2.0",
-    "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-prettier": "5.2.1",
     "jest-environment-jsdom": "29.7.0",
-    "prettier": "3.3.3",
     "typescript": "5.6.3"
   },
   "scripts": {
@@ -79,23 +70,15 @@
     "test": "node scripts/test.js --env=jsdom",
     "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
-    "lint": "eslint -c .eslintrc ./src",
+    "lint": "npx biome check ./src",
+    "lint-write": "npx biome check --write ./src",
     "typecheck": "tsc --noEmit"
   },
   "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ],
+    "roots": ["<rootDir>/src"],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+    "setupFiles": ["react-app-polyfill/jsdom"],
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
@@ -134,11 +117,6 @@
     "resetMocks": true
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "presets": ["react-app"]
   }
 }
