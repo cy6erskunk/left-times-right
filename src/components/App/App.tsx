@@ -1,10 +1,15 @@
 import * as React from 'react'
 
-import {INITIAL_SCORE, INITIAL_HEARTS, TOP_SCORE_KEY, GAME_TIMEOUT_IN_MS} from '../../constants'
-import {generateDigit} from '../../helpers'
-import StartScene from '../Start/Start'
-import GameScene from '../Game/Game'
+import {
+  GAME_TIMEOUT_IN_MS,
+  INITIAL_HEARTS,
+  INITIAL_SCORE,
+  TOP_SCORE_KEY,
+} from '../../constants'
+import { generateDigit } from '../../helpers'
 import EndScene from '../End/End'
+import GameScene from '../Game/Game'
+import StartScene from '../Start/Start'
 
 export function getTopScore(): string {
   const value = localStorage.getItem(TOP_SCORE_KEY)
@@ -71,7 +76,8 @@ class App extends React.Component<Props, State> {
     })
   }
 
-  getValue: () => number = () => parseInt(this.inputRef?.current?.value || '0', 10)
+  getValue: () => number = () =>
+    parseInt(this.inputRef?.current?.value || '0', 10)
 
   updateScore: () => void = () =>
     this.setState((state) => {
@@ -83,7 +89,11 @@ class App extends React.Component<Props, State> {
 
       const newScore = isLove ? state.score + 1 : state.score
       localStorage.setItem('score', String(newScore))
-      const newHearts = state.hearts ? (isLove ? state.hearts : state.hearts - 1) : 0
+      const newHearts = state.hearts
+        ? isLove
+          ? state.hearts
+          : state.hearts - 1
+        : 0
       if (newHearts > 0) {
         return {
           ...newState,
@@ -117,15 +127,22 @@ class App extends React.Component<Props, State> {
     }
   }
 
-  onSubmitTask: (e: Event) => void = (e: Event) => {
-    if (this.inputRef && this.inputRef.current && this.inputRef.current.checkValidity()) {
+  onSubmitTask: (e: Event) => void = (_e: Event) => {
+    if (
+      this.inputRef &&
+      this.inputRef.current &&
+      this.inputRef.current.checkValidity()
+    ) {
       this.updateScore()
     }
   }
 
   onAnimationEnd: () => void = () => {
     if (this.emojiRef && this.emojiRef.current) {
-      this.emojiRef.current.removeEventListener('animationend', this.onAnimationEnd)
+      this.emojiRef.current.removeEventListener(
+        'animationend',
+        this.onAnimationEnd,
+      )
     }
     this.setState({
       showEmoji: false,
@@ -133,7 +150,16 @@ class App extends React.Component<Props, State> {
   }
 
   renderGameScene: () => React.ReactElement = () => {
-    const {left, right, prevLeft, prevRight, score, showEmoji, isLove, hearts} = this.state
+    const {
+      left,
+      right,
+      prevLeft,
+      prevRight,
+      score,
+      showEmoji,
+      isLove,
+      hearts,
+    } = this.state
     if (this.timer) {
       clearTimeout(this.timer)
       this.timer = null
@@ -160,7 +186,7 @@ class App extends React.Component<Props, State> {
   }
 
   render(): React.ReactElement {
-    const {score, hearts} = this.state
+    const { score, hearts } = this.state
     return (
       <div className="App" role="main">
         <React.StrictMode>

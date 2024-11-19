@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import {MILTIPLY_SIGN} from '../../constants'
+import { MILTIPLY_SIGN } from '../../constants'
 
 type Props = {
   left: number

@@ -1,8 +1,8 @@
+import { render, screen } from '@testing-library/react'
 import * as React from 'react'
-import {render, screen} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import {PreviousTaskInner as PreviousTask} from '../components/PreviousTask/PreviousTask'
+import { PreviousTaskInner as PreviousTask } from '../components/PreviousTask/PreviousTask'
 
 it('renders nothing if left prop is absent', () => {
   render(<PreviousTask right={1} />)
