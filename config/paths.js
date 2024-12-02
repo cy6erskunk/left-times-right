@@ -15,8 +15,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // single-page apps that may serve index.html for nested URLs like /todos/42.
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
-const package_json = await import(resolveApp('package.json'), { assert: { type: 'json' } });
-const jsonData = package_json.default;
+const jsonData = JSON.parse(fs.readFileSync(resolveApp('package.json'), { encoding: 'utf-8' }));
 const publicUrlOrPath = getPublicUrlOrPath(
   process.env.NODE_ENV === 'development',
   jsonData.homepage,
