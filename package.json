@@ -60,7 +60,7 @@
     "@babel/preset-env": "7.26.0",
     "@biomejs/biome": "1.9.4",
     "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "16.0.1",
+    "@testing-library/react": "16.1.0",
     "jest-environment-jsdom": "29.7.0",
     "typescript": "5.7.2"
   },
