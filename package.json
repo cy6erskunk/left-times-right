@@ -62,7 +62,7 @@
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
     "jest-environment-jsdom": "29.7.0",
-    "typescript": "5.7.2"
+    "typescript": "5.7.3"
   },
   "scripts": {
     "start": "node scripts/start.js",
