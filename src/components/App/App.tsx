@@ -86,6 +86,8 @@ function App() {
       setShowEmoji(true)
       setIsLove(isCurrentLove)
     } else {
+      setPrevLeft(-Infinity)
+      setPrevRight(-Infinity)
       setTopScore(String(newScore))
       setShowEmoji(false)
       setIsLove(false)
