@@ -2,6 +2,7 @@
 import { NumericInput } from 'numeric-keyboard/dist/numeric_keyboard.react'
 import * as React from 'react'
 
+import { useEffect, useRef, useState } from 'react'
 import {
   CORRECT_ANSWER_EMOJI,
   INCORRECT_ANSWER_EMOJI,
@@ -9,7 +10,6 @@ import {
 } from '../../constants'
 import PreviousTask from '../PreviousTask/PreviousTask'
 import Task from '../Task/Task'
-import { useEffect, useRef, useState } from 'react'
 
 type ExternalProps = {
   score: number
