@@ -33,7 +33,7 @@ export const scenes = {
 function App() {
   const inputRef = useRef<HTMLInputElement>(null)
   const emojiRef = useRef<HTMLDivElement>(null)
-  let timer: number | null = null
+  const timerRef = useRef<number | null>(null)
 
   if (localStorage.getItem('score') === null) {
     localStorage.setItem('score', String(INITIAL_SCORE))
@@ -115,11 +115,11 @@ function App() {
   }
 
   const renderGameScene = (): React.JSX.Element => {
-    if (timer) {
-      clearTimeout(timer)
-      timer = null
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
     }
-    timer = window.setTimeout(updateScore, GAME_TIMEOUT_IN_MS)
+    timerRef.current = window.setTimeout(updateScore, GAME_TIMEOUT_IN_MS)
 
     return (
       <GameScene
@@ -144,9 +144,9 @@ function App() {
   // Clear timer on unmount
   useEffect(() => {
     return () => {
-      if (timer) {
-        clearTimeout(timer)
-        timer = null
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
       }
     }
   }, [])
