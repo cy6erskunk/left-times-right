@@ -3,46 +3,46 @@ import * as Keys from '../keys.js'
 export default [
   [
     {
-      key: Keys.ONE
+      key: Keys.ONE,
     },
     {
-      key: Keys.TWO
+      key: Keys.TWO,
     },
     {
-      key: Keys.THREE
-    },
-  ],
-  [
-    {
-      key: Keys.FOUR
-    },
-    {
-      key: Keys.FIVE
-    },
-    {
-      key: Keys.SIX
+      key: Keys.THREE,
     },
   ],
   [
     {
-      key: Keys.SEVEN
+      key: Keys.FOUR,
     },
     {
-      key: Keys.EIGHT
+      key: Keys.FIVE,
     },
     {
-      key: Keys.NINE
+      key: Keys.SIX,
     },
   ],
   [
     {
-      key: Keys.DEL
+      key: Keys.SEVEN,
     },
     {
-      key: Keys.ZERO
+      key: Keys.EIGHT,
     },
     {
-      key: Keys.ENTER
+      key: Keys.NINE,
+    },
+  ],
+  [
+    {
+      key: Keys.DEL,
+    },
+    {
+      key: Keys.ZERO,
+    },
+    {
+      key: Keys.ENTER,
     },
   ],
 ]

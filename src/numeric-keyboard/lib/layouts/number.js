@@ -3,13 +3,13 @@ import * as Keys from '../keys.js'
 export default [
   [
     {
-      key: Keys.ONE
+      key: Keys.ONE,
     },
     {
-      key: Keys.TWO
+      key: Keys.TWO,
     },
     {
-      key: Keys.THREE
+      key: Keys.THREE,
     },
     {
       key: Keys.DEL,
@@ -18,24 +18,24 @@ export default [
   ],
   [
     {
-      key: Keys.FOUR
+      key: Keys.FOUR,
     },
     {
-      key: Keys.FIVE
+      key: Keys.FIVE,
     },
     {
-      key: Keys.SIX
+      key: Keys.SIX,
     },
   ],
   [
     {
-      key: Keys.SEVEN
+      key: Keys.SEVEN,
     },
     {
-      key: Keys.EIGHT
+      key: Keys.EIGHT,
     },
     {
-      key: Keys.NINE
+      key: Keys.NINE,
     },
     {
       key: Keys.ENTER,
@@ -44,13 +44,13 @@ export default [
   ],
   [
     {
-      key: Keys.DOT
+      key: Keys.DOT,
     },
     {
-      key: Keys.ZERO
+      key: Keys.ZERO,
     },
     {
-      key: Keys.ESC
+      key: Keys.ESC,
     },
   ],
 ]

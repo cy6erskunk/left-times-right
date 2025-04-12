@@ -1,21 +1,21 @@
-'use strict';
+'use strict'
 
-import * as fs from 'fs';
-import * as evalSourceMapMiddleware from 'react-dev-utils/evalSourceMapMiddleware.js';
-import * as noopServiceWorkerMiddleware from 'react-dev-utils/noopServiceWorkerMiddleware.js';
-import ignoredFiles from 'react-dev-utils/ignoredFiles.js';
-import * as redirectServedPath from 'react-dev-utils/redirectServedPathMiddleware.js';
-import * as paths from './paths.js';
-import getHttpsConfig from './getHttpsConfig.js';
+import * as fs from 'fs'
+import * as evalSourceMapMiddleware from 'react-dev-utils/evalSourceMapMiddleware.js'
+import ignoredFiles from 'react-dev-utils/ignoredFiles.js'
+import * as noopServiceWorkerMiddleware from 'react-dev-utils/noopServiceWorkerMiddleware.js'
+import * as redirectServedPath from 'react-dev-utils/redirectServedPathMiddleware.js'
+import getHttpsConfig from './getHttpsConfig.js'
+import * as paths from './paths.js'
 
-const host = process.env.HOST || '0.0.0.0';
-const sockHost = process.env.WDS_SOCKET_HOST;
-const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
-const sockPort = process.env.WDS_SOCKET_PORT;
+const host = process.env.HOST || '0.0.0.0'
+const sockHost = process.env.WDS_SOCKET_HOST
+const sockPath = process.env.WDS_SOCKET_PATH // default: '/ws'
+const sockPort = process.env.WDS_SOCKET_PORT
 
 export default function (proxy, allowedHost) {
   const disableFirewall =
-    !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
+    !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true'
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
@@ -127,5 +127,5 @@ export default function (proxy, allowedHost) {
 
     //   return middlewares;
     // },
-  };
-};
+  }
+}

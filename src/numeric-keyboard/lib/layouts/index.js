@@ -3,5 +3,5 @@ import tel from './tel.js'
 
 export default {
   number,
-  tel
+  tel,
 }

@@ -5,7 +5,6 @@ const RNumber = /^\d*(?:\.\d*)?$/
 const RTel = /^\d*$/
 
 const KeyboardCenter = (function () {
-  
   let activeInput
 
   return {
@@ -18,15 +17,18 @@ const KeyboardCenter = (function () {
       if (!activeInput) {
         return
       }
-      if (e && (activeInput.ks.inputElement.contains(e.target) || activeInput.ks.keyboardElement.contains(e.target))) {
+      if (
+        e &&
+        (activeInput.ks.inputElement.contains(e.target) ||
+          activeInput.ks.keyboardElement.contains(e.target))
+      ) {
         return
       }
       activeInput.closeKeyboard()
       activeInput = null
       document.removeEventListener('touchend', this.unregister, false)
-    }
+    },
   }
-
 })()
 
 export const Options = {
@@ -40,15 +42,17 @@ export const Options = {
   placeholder: '',
   format: '^',
   layout: 'number',
-  entertext: 'enter'
+  entertext: 'enter',
 }
 
 export const Mixins = {
-
   init(options) {
     let formatFn = options.format
     if (typeof formatFn === 'string') {
-      formatFn = (rformat => (val => rformat.test(val)))(new RegExp(options.format))
+      formatFn = (
+        (rformat) => (val) =>
+          rformat.test(val)
+      )(new RegExp(options.format))
     }
 
     const value = options.value
@@ -65,10 +69,10 @@ export const Mixins = {
       cursorActive: false,
       keyboard: null,
       inputElement: null,
-      keyboardElement: null
+      keyboardElement: null,
     }
   },
-  
+
   destroy() {
     KeyboardCenter.unregister()
   },
@@ -79,7 +83,10 @@ export const Mixins = {
 
   onMounted(el) {
     this.set('inputElement', el)
-    this.set('cursorColor', window.getComputedStyle(el).getPropertyValue('color'))
+    this.set(
+      'cursorColor',
+      window.getComputedStyle(el).getPropertyValue('color'),
+    )
 
     if (this.kp.autofocus && !this.kp.readonly && !this.kp.disabled) {
       setTimeout(() => this.openKeyboard(), 500)
@@ -94,18 +101,23 @@ export const Mixins = {
     e.stopPropagation()
     this.openKeyboard()
     const cursorPos = +e.target.dataset.index
-    this.set('cursorPos', isNaN(cursorPos) ? this.ks.rawValue.length : cursorPos)
+    this.set(
+      'cursorPos',
+      isNaN(cursorPos) ? this.ks.rawValue.length : cursorPos,
+    )
   },
 
   input(key) {
     const { type, maxlength } = this.kp
     const { rawValue, cursorPos, formatFn } = this.ks
 
-    const input = key => {
+    const input = (key) => {
       // Use performance-optimized approach
       const isAdd = typeof key !== 'undefined'
-      let newValue, newRawValue, newCursorPos
-      
+      let newValue
+      let newRawValue
+      let newCursorPos
+
       // Optimize by avoiding unnecessary array operations when possible
       if (isAdd) {
         // Fast path for adding a digit
@@ -115,7 +127,9 @@ export const Mixins = {
         newCursorPos = cursorPos + 1
       } else {
         // Fast path for deleting a digit
-        if (cursorPos <= 0) return; // Nothing to delete
+        if (cursorPos <= 0) {
+          return // Nothing to delete
+        }
         newRawValue = [...rawValue]
         newRawValue.splice(cursorPos - 1, 1)
         newValue = newRawValue.join('')
@@ -125,8 +139,10 @@ export const Mixins = {
       // Only format and validate if we have a valid input
       if (formatFn(newValue)) {
         if (type === 'number') {
-          if (!RNumber.test(newValue)) return;
-          
+          if (!RNumber.test(newValue)) {
+            return
+          }
+
           // Only parse if needed
           if (newValue !== '') {
             const parsed = parseFloat(newValue, 10)
@@ -138,15 +154,18 @@ export const Mixins = {
               newValue = parsed
             }
           }
-        } else if (newValue.length > maxlength || (type === 'tel' && !RTel.test(newValue))) {
-          return;
+        } else if (
+          newValue.length > maxlength ||
+          (type === 'tel' && !RTel.test(newValue))
+        ) {
+          return
         }
 
         // Batch state updates for better performance
         this.set('value', newValue)
         this.set('rawValue', newRawValue)
         this.set('cursorPos', newCursorPos)
-        
+
         // Dispatch the input event immediately
         this.dispatch('input', newValue)
       }
@@ -167,17 +186,17 @@ export const Mixins = {
           input()
         }
         break
-      case Keys.DOT   :
-      case Keys.ZERO  :
-      case Keys.ONE   :
-      case Keys.TWO   :
-      case Keys.THREE :
-      case Keys.FOUR  :
-      case Keys.FIVE  :
-      case Keys.SIX   :
-      case Keys.SEVEN :
-      case Keys.EIGHT :
-      case Keys.NINE  :
+      case Keys.DOT:
+      case Keys.ZERO:
+      case Keys.ONE:
+      case Keys.TWO:
+      case Keys.THREE:
+      case Keys.FOUR:
+      case Keys.FIVE:
+      case Keys.SIX:
+      case Keys.SEVEN:
+      case Keys.EIGHT:
+      case Keys.NINE:
       default:
         input(key)
         break
@@ -186,45 +205,56 @@ export const Mixins = {
 
   moveCursor() {
     if (!this.ks.cursorActive) {
-      return;
+      return
     }
 
     // Micro-optimization: Cache DOM queries since they're expensive
-    const { inputElement } = this.ks;
-    if (!inputElement) return;
-    
-    const elCursor = inputElement.querySelector('.numeric-input-cursor');
-    const elText = inputElement.querySelector('.numeric-input-text');
-    if (!elCursor || !elText) return;
-    
+    const { inputElement } = this.ks
+    if (!inputElement) {
+      return
+    }
+
+    const elCursor = inputElement.querySelector('.numeric-input-cursor')
+    const elText = inputElement.querySelector('.numeric-input-text')
+    if (!elCursor || !elText) {
+      return
+    }
+
     // Find character element at cursor position
-    const elCharactor = elText.querySelector(`span:nth-child(${this.ks.cursorPos})`);
+    const elCharactor = elText.querySelector(
+      `span:nth-child(${this.ks.cursorPos})`,
+    )
 
     // Handle case when cursor is at beginning or no characters
     if (!elCharactor) {
       // Use direct style setting for better performance
-      elCursor.style.transform = 'translateX(0)';
-      elText.style.transform = 'translateX(0)';
-      return;
+      elCursor.style.transform = 'translateX(0)'
+      elText.style.transform = 'translateX(0)'
+      return
     }
 
     // Use hardware-accelerated transforms for smooth animation
-    const cursorOffset = elCharactor.offsetLeft + elCharactor.offsetWidth;
-    const maxVisibleWidth = elText.parentNode.offsetWidth;
-    
+    const cursorOffset = elCharactor.offsetLeft + elCharactor.offsetWidth
+    const maxVisibleWidth = elText.parentNode.offsetWidth
+
     // Avoid calculating values if they haven't changed
-    if (this._lastCursorOffset !== cursorOffset || this._lastMaxWidth !== maxVisibleWidth) {
-      elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`;
-      elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`;
-      
+    if (
+      this._lastCursorOffset !== cursorOffset ||
+      this._lastMaxWidth !== maxVisibleWidth
+    ) {
+      elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`
+      elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`
+
       // Cache these values to avoid unnecessary updates
-      this._lastCursorOffset = cursorOffset;
-      this._lastMaxWidth = maxVisibleWidth;
+      this._lastCursorOffset = cursorOffset
+      this._lastMaxWidth = maxVisibleWidth
     }
   },
 
   openKeyboard() {
-    if (this.ks.keyboard) { return }
+    if (this.ks.keyboard) {
+      return
+    }
 
     const elContainer = document.createElement('div')
     const elShadow = document.createElement('div')
@@ -238,17 +268,21 @@ export const Mixins = {
       elKeyboard,
       {
         layout: this.kp.layout || this.kp.type,
-        entertext: this.kp.entertext
+        entertext: this.kp.entertext,
       },
       {
-        press: this.input.bind(this)
+        press: this.input.bind(this),
       },
-      keyboard => this.set('keyboard', keyboard)
+      (keyboard) => this.set('keyboard', keyboard),
     )
 
-    animate((timestamp, frame, frames) => {
-      elKeyboard.style.transform = `translateY(${(frames - frame) / frames * 100}%)`
-    }, () => {}, 10)
+    animate(
+      (_timestamp, frame, frames) => {
+        elKeyboard.style.transform = `translateY(${((frames - frame) / frames) * 100}%)`
+      },
+      () => {},
+      10,
+    )
 
     this.set('keyboardElement', elKeyboard)
     this.set('cursorActive', true)
@@ -259,20 +293,26 @@ export const Mixins = {
   },
 
   closeKeyboard() {
-    if (!this.ks.keyboard) { return }
+    if (!this.ks.keyboard) {
+      return
+    }
 
     const keyboard = this.ks.keyboard
     const elKeyboard = this.ks.keyboardElement
 
-    animate((timestamp, frame, frames) => {
-      elKeyboard.style.transform = `translateY(${frame / frames * 100}%)`
-    }, () => {
-      setTimeout(() => {
-        this.destroyKeyboard(elKeyboard, keyboard)
-        document.body.removeChild(elKeyboard.parentNode)
-      }, 300)
-    }, 10)
-    
+    animate(
+      (_timestamp, frame, frames) => {
+        elKeyboard.style.transform = `translateY(${(frame / frames) * 100}%)`
+      },
+      () => {
+        setTimeout(() => {
+          this.destroyKeyboard(elKeyboard, keyboard)
+          document.body.removeChild(elKeyboard.parentNode)
+        }, 300)
+      },
+      10,
+    )
+
     this.set('keyboard', null)
     this.set('keyboardElement', null)
     this.set('cursorActive', false)
@@ -292,6 +332,5 @@ export const Mixins = {
 
   dispatch(/* event, payload */) {
     throw new Error('dispatch method must be overrided!')
-  }
-
+  },
 }

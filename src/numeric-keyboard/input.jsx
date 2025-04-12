@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import * as Keys from './lib/keys.js'
 import { NumericKeyboard } from './keyboard.jsx'
+import * as Keys from './lib/keys.js'
 import './lib/styles/styles.css'
 
 const RNumber = /^\d*(?:\.\d*)?$/

@@ -3,7 +3,7 @@ import Layouts from './layouts/index.js'
 
 export const Options = {
   layout: 'number',
-  entertext: 'enter'
+  entertext: 'enter',
 }
 
 export const Mixins = {
@@ -16,10 +16,12 @@ export const Mixins = {
       if (!Array.isArray(resolvedLayout)) {
         throw new Error(`${layout} is not a build-in layout.`)
       }
-    }
-    else {
+    } else {
       resolvedLayout = layout
-      if (!Array.isArray(resolvedLayout) || !resolvedLayout.every(i => Array.isArray(i))) {
+      if (
+        !Array.isArray(resolvedLayout) ||
+        !resolvedLayout.every((i) => Array.isArray(i))
+      ) {
         throw new Error(`custom layout must be a two-dimensional array.`)
       }
     }
@@ -35,7 +37,7 @@ export const Mixins = {
   set(key, value) {
     this.ks[key] = value
   },
-    
+
   onTouchend(key) {
     this.dispatch('press', key)
     if (key === ENTER) {
@@ -45,6 +47,5 @@ export const Mixins = {
 
   dispatch(/* event, payload */) {
     throw new Error('dispatch method must be overrided!')
-  }
-
+  },
 }
