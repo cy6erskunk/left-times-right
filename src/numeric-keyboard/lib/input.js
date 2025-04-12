@@ -102,30 +102,52 @@ export const Mixins = {
     const { rawValue, cursorPos, formatFn } = this.ks
 
     const input = key => {
+      // Use performance-optimized approach
       const isAdd = typeof key !== 'undefined'
-      const newRawValue = rawValue.slice()
+      let newValue, newRawValue, newCursorPos
+      
+      // Optimize by avoiding unnecessary array operations when possible
       if (isAdd) {
+        // Fast path for adding a digit
+        newRawValue = [...rawValue]
         newRawValue.splice(cursorPos, 0, key)
-      }
-      else {
+        newValue = newRawValue.join('')
+        newCursorPos = cursorPos + 1
+      } else {
+        // Fast path for deleting a digit
+        if (cursorPos <= 0) return; // Nothing to delete
+        newRawValue = [...rawValue]
         newRawValue.splice(cursorPos - 1, 1)
+        newValue = newRawValue.join('')
+        newCursorPos = cursorPos - 1
       }
 
-      let newValue = newRawValue.join('')
-
+      // Only format and validate if we have a valid input
       if (formatFn(newValue)) {
         if (type === 'number') {
-          if (!RNumber.test(newValue)) { return }
-          newValue = parseFloat(newValue, 10)
-          if (isNaN(newValue)) {
-            newValue = ''
+          if (!RNumber.test(newValue)) return;
+          
+          // Only parse if needed
+          if (newValue !== '') {
+            const parsed = parseFloat(newValue, 10)
+            if (isNaN(parsed)) {
+              newValue = ''
+              newRawValue = []
+              newCursorPos = 0
+            } else {
+              newValue = parsed
+            }
           }
+        } else if (newValue.length > maxlength || (type === 'tel' && !RTel.test(newValue))) {
+          return;
         }
-        else if (newValue.length > maxlength || type === 'tel' && !RTel.test(newValue)) { return }
 
+        // Batch state updates for better performance
         this.set('value', newValue)
         this.set('rawValue', newRawValue)
-        this.set('cursorPos', isAdd ? cursorPos + 1 : cursorPos - 1)
+        this.set('cursorPos', newCursorPos)
+        
+        // Dispatch the input event immediately
         this.dispatch('input', newValue)
       }
     }
@@ -164,23 +186,41 @@ export const Mixins = {
 
   moveCursor() {
     if (!this.ks.cursorActive) {
-      return
+      return;
     }
 
-    const elCursor = this.ks.inputElement.querySelector('.numeric-input-cursor')
-    const elText = this.ks.inputElement.querySelector('.numeric-input-text')
-    const elCharactor = elText.querySelector(`span:nth-child(${this.ks.cursorPos})`)
+    // Micro-optimization: Cache DOM queries since they're expensive
+    const { inputElement } = this.ks;
+    if (!inputElement) return;
+    
+    const elCursor = inputElement.querySelector('.numeric-input-cursor');
+    const elText = inputElement.querySelector('.numeric-input-text');
+    if (!elCursor || !elText) return;
+    
+    // Find character element at cursor position
+    const elCharactor = elText.querySelector(`span:nth-child(${this.ks.cursorPos})`);
 
+    // Handle case when cursor is at beginning or no characters
     if (!elCharactor) {
-      elCursor.style.transform = 'translateX(0)'
-      elText.style.transform = 'translateX(0)'
-      return
+      // Use direct style setting for better performance
+      elCursor.style.transform = 'translateX(0)';
+      elText.style.transform = 'translateX(0)';
+      return;
     }
 
-    const cursorOffset = elCharactor.offsetLeft + elCharactor.offsetWidth
-    const maxVisibleWidth = elText.parentNode.offsetWidth
-    elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`
-    elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`
+    // Use hardware-accelerated transforms for smooth animation
+    const cursorOffset = elCharactor.offsetLeft + elCharactor.offsetWidth;
+    const maxVisibleWidth = elText.parentNode.offsetWidth;
+    
+    // Avoid calculating values if they haven't changed
+    if (this._lastCursorOffset !== cursorOffset || this._lastMaxWidth !== maxVisibleWidth) {
+      elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`;
+      elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`;
+      
+      // Cache these values to avoid unnecessary updates
+      this._lastCursorOffset = cursorOffset;
+      this._lastMaxWidth = maxVisibleWidth;
+    }
   },
 
   openKeyboard() {

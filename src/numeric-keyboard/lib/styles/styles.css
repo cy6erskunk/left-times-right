@@ -1,6 +1,6 @@
 @font-face {
   font-family: numeric-keyboard;
-  src: url("./lib/styles/numeric-keyboard.woff") format("woff");
+  src: url("numeric-keyboard.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -20,7 +20,8 @@
   color: #000;
   background: #fff;
 }
-.numeric-keyboard-key:active {
+.numeric-keyboard-key:active,
+.numeric-keyboard-key.active {
   background: #929ca8;
 }
 .numeric-keyboard-key[data-key='""'] {

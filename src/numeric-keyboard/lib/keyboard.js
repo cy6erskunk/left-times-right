@@ -29,7 +29,7 @@ export const Mixins = {
   },
 
   destroy() {
-
+    // Nothing to clean up
   },
 
   set(key, value) {
