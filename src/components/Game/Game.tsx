@@ -1,5 +1,5 @@
 // @ts-ignore numeric-keyboard/dist/numeric_keyboard.react
-import { NumericInput } from 'numeric-keyboard/dist/numeric_keyboard.react'
+import { NumericInput } from '../../numeric-keyboard/index.js'
 import * as React from 'react'
 
 import { useEffect, useRef, useState } from 'react'
