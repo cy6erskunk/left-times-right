@@ -8,6 +8,7 @@ import {
   TOP_SCORE_KEY,
 } from '../../constants'
 import { generateDigit } from '../../helpers'
+import { KeyboardManager } from '../../numeric-keyboard/input'
 import EndScene from '../End/End'
 import GameScene from '../Game/Game'
 import StartScene from '../Start/Start'
@@ -51,6 +52,9 @@ function App() {
   const [hearts, setHearts] = useState<number | null | undefined>(null)
 
   const goToGame = () => {
+    // Clean up any existing keyboard before changing scenes
+    KeyboardManager.cleanup()
+
     setHearts(3)
     setScore(0)
     setShowEmoji(false)
@@ -86,6 +90,7 @@ function App() {
       setShowEmoji(true)
       setIsLove(isCurrentLove)
     } else {
+      KeyboardManager.cleanup()
       setPrevLeft(-Infinity)
       setPrevRight(-Infinity)
       setTopScore(String(newScore))
@@ -103,7 +108,7 @@ function App() {
     }
   }
 
-  const onSubmitTask = (_e: Event): void => {
+  const onSubmitTask = (): void => {
     if (inputRef && inputRef.current && inputRef.current.checkValidity()) {
       updateScore()
     }
@@ -143,13 +148,13 @@ function App() {
     )
   }
 
-  // Clear timer on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current)
         timerRef.current = null
       }
+      KeyboardManager.cleanup()
     }
   }, [])
 

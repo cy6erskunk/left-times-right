@@ -5,8 +5,8 @@ import Layouts from './lib/layouts/index.js'
 export function NumericKeyboard({
   layout = 'number',
   entertext = 'enter',
+  onEnterpress = undefined,
   onPress,
-  onEnterpress,
 }) {
   // Get the proper layout based on the prop value
   let resolvedLayout

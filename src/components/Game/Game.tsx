@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NumericInput } from '../../numeric-keyboard/index.js'
+import { NumericInput } from '../../numeric-keyboard/index'
 
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -17,7 +17,7 @@ type ExternalProps = {
   right: number
   prevLeft: number
   prevRight: number
-  onSubmitTask: (e: Event) => void
+  onSubmitTask: () => void
   onFocus: () => void
   onAnimationEnd: () => void
   inputRef: React.RefObject<HTMLInputElement>

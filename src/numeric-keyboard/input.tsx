@@ -7,56 +7,129 @@ import './lib/styles/styles.css'
 const RNumber = /^\d*(?:\.\d*)?$/
 const RTel = /^\d*$/
 
+type AciveInput = {
+  inputElement: HTMLInputElement | null
+  keyboardElement: HTMLElement
+}
+
+type KeyboardManagerType = {
+  activeInput: null | AciveInput
+  closeKeyboardFn: null | ((skipAnimation?: boolean) => void)
+  documentClickHandler: null | ((e: MouseEvent) => void)
+  eventListenerAdded: boolean
+  register: (
+    input: AciveInput,
+    closeKeyboard: (skipAnimation?: boolean) => void,
+  ) => void
+  unregister: () => void
+  cleanup: () => void
+}
+
 // Single keyboard manager to ensure only one keyboard is visible at a time
-const KeyboardManager = {
+export const KeyboardManager: KeyboardManagerType = {
   activeInput: null,
   closeKeyboardFn: null,
   documentClickHandler: null,
+  eventListenerAdded: false,
 
   register(input, closeKeyboard) {
+    // Clean up any existing keyboard first
     this.unregister()
+
     this.activeInput = input
     this.closeKeyboardFn = closeKeyboard
 
-    // Use more reliable document click handler that won't interfere with keyboard events
-    this.documentClickHandler = (e) => {
-      // Don't close when clicking within input or keyboard
-      if (!this.activeInput) {
-        return
-      }
+    // Create document click handler if needed
+    if (!this.documentClickHandler) {
+      this.documentClickHandler = (e) => {
+        // Skip if no active input (already unregistered)
+        if (!this.activeInput) {
+          return
+        }
 
-      const { inputElement, keyboardElement } = this.activeInput
+        const { inputElement, keyboardElement } = this.activeInput
 
-      if (inputElement && inputElement.contains(e.target)) {
-        return
-      }
-      if (keyboardElement && keyboardElement.contains(e.target)) {
-        return
-      }
+        // Don't close if clicking within input or keyboard
+        if (inputElement && inputElement.contains(e.target as Node)) {
+          return
+        }
+        if (keyboardElement && keyboardElement.contains(e.target as Node)) {
+          return
+        }
 
-      // Safe to close - clicked outside both input and keyboard
-      if (this.closeKeyboardFn) {
-        this.closeKeyboardFn()
-      }
+        // Close keyboard - clicked outside
+        if (this.closeKeyboardFn) {
+          this.closeKeyboardFn()
+        }
 
-      this.unregister()
+        this.unregister()
+      }
     }
 
-    // Add with a small delay to avoid immediate triggering
-    setTimeout(() => {
-      document.addEventListener('click', this.documentClickHandler)
-    }, 100)
+    // Add event listener if not already added
+    if (!this.eventListenerAdded) {
+      if (!this.documentClickHandler) {
+        const documentClickHandler = this.documentClickHandler
+        // Add with a small delay to avoid immediate triggering
+        setTimeout(() => {
+          document.addEventListener('click', documentClickHandler)
+          this.eventListenerAdded = true
+        }, 100)
+      }
+    }
   },
 
   unregister() {
-    if (this.documentClickHandler) {
+    // Remove event listener
+    if (this.eventListenerAdded && this.documentClickHandler) {
       document.removeEventListener('click', this.documentClickHandler)
-      this.documentClickHandler = null
+      this.eventListenerAdded = false
     }
 
+    // Clear references
     this.activeInput = null
     this.closeKeyboardFn = null
   },
+
+  // This method will be called by the App when unmounting all components
+  cleanup() {
+    if (this.closeKeyboardFn) {
+      // Pass true to skip animation for immediate cleanup
+      this.closeKeyboardFn(true)
+    }
+
+    // Then unregister
+    this.unregister()
+
+    // Final safety check: remove any orphaned keyboard elements
+    const orphanedKeyboards = document.querySelectorAll(
+      '.numeric-keyboard-actionsheet',
+    )
+    if (orphanedKeyboards.length > 0) {
+      orphanedKeyboards.forEach((el) => {
+        if (document.body.contains(el)) {
+          document.body.removeChild(el)
+        }
+      })
+    }
+  },
+}
+
+type NumericInputType = {
+  type?: string
+  value?: string
+  autofocus?: boolean
+  disabled?: boolean
+  readonly?: boolean
+  maxlength?: number
+  placeholder?: string
+  format?: string
+  layout?: string
+  entertext?: string
+  onFocus?: () => void
+  onBlur?: () => void
+  onInput: (input: string) => void
+  onEnterpress: () => void
 }
 
 export function NumericInput({
@@ -74,28 +147,31 @@ export function NumericInput({
   onBlur = undefined,
   onInput,
   onEnterpress,
-}) {
+}: NumericInputType) {
   // Parse the format option
   const getFormatFn = () => {
     if (typeof format === 'function') {
       return format
     }
-    return (val) => new RegExp(format).test(val)
+    return (val: string) => new RegExp(format).test(val)
   }
 
   // State
   const [rawValue, setRawValue] = useState(value.toString().split(''))
   const [cursorPos, setCursorPos] = useState(value.toString().length)
   const [cursorActive, setCursorActive] = useState(false)
-  const [cursorColor, setCursorColor] = useState(null)
-  const [keyboard, setKeyboard] = useState(null)
+  const [cursorColor, setCursorColor] = useState<string>('')
+  const [keyboard, setKeyboard] = useState<{
+    root: ReturnType<typeof createRoot>
+    element: HTMLElement
+  } | null>(null)
 
   // Refs
-  const inputRef = useRef(null)
-  const keyboardContainerRef = useRef(null)
-  const formatFnRef = useRef(getFormatFn())
-  const lastCursorOffsetRef = useRef(null)
-  const lastMaxWidthRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const keyboardContainerRef = useRef<HTMLElement | null>(null)
+  const formatFnRef = useRef<Function>(getFormatFn())
+  const lastCursorOffsetRef = useRef<number | null>(null)
+  const lastMaxWidthRef = useRef<number | null>(null)
 
   // Update the underlying value when props change
   useEffect(() => {
@@ -119,11 +195,20 @@ export function NumericInput({
       return () => clearTimeout(timer)
     }
 
-    return () => {
-      closeKeyboard()
-      KeyboardManager.unregister()
-    }
+    // No cleanup needed in this case
+    return undefined
   }, [])
+
+  // Add a dedicated cleanup effect
+  useEffect(() => {
+    // This will be called when component unmounts
+    return () => {
+      if (keyboard) {
+        // Use our closeKeyboard function with skipAnimation=true
+        closeKeyboard(true)
+      }
+    }
+  }, [keyboard])
 
   // Update cursor position
   useEffect(() => {
@@ -131,37 +216,42 @@ export function NumericInput({
       return
     }
 
-    const elCursor = inputRef.current?.querySelector('.numeric-input-cursor')
-    const elText = inputRef.current?.querySelector('.numeric-input-text')
-    if (!elCursor || !elText) {
-      return
-    }
+    const elCursor = inputRef.current?.querySelector<HTMLElement>(
+      '.numeric-input-cursor',
+    )
+    const elText = inputRef.current?.querySelector<HTMLElement>(
+      '.numeric-input-text',
+    )
+    if (elCursor && elText) {
+      const elCharacter = elText.querySelector<HTMLElement>(
+        `span:nth-child(${cursorPos})`,
+      )
 
-    const elCharacter = elText.querySelector(`span:nth-child(${cursorPos})`)
+      if (!elCharacter) {
+        elCursor.style.transform = 'translateX(0)'
+        elText.style.transform = 'translateX(0)'
+        return
+      } else {
+        const cursorOffset = elCharacter.offsetLeft + elCharacter.offsetWidth
+        const maxVisibleWidth = (elText.parentNode as HTMLElement)?.offsetWidth
 
-    if (!elCharacter) {
-      elCursor.style.transform = 'translateX(0)'
-      elText.style.transform = 'translateX(0)'
-      return
-    }
+        if (
+          lastCursorOffsetRef.current !== cursorOffset ||
+          lastMaxWidthRef.current !== maxVisibleWidth
+        ) {
+          elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`
+          elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`
 
-    const cursorOffset = elCharacter.offsetLeft + elCharacter.offsetWidth
-    const maxVisibleWidth = elText.parentNode.offsetWidth
-
-    if (
-      lastCursorOffsetRef.current !== cursorOffset ||
-      lastMaxWidthRef.current !== maxVisibleWidth
-    ) {
-      elCursor.style.transform = `translateX(${Math.min(maxVisibleWidth - 1, cursorOffset)}px)`
-      elText.style.transform = `translateX(${Math.min(0, maxVisibleWidth - cursorOffset)}px)`
-
-      lastCursorOffsetRef.current = cursorOffset
-      lastMaxWidthRef.current = maxVisibleWidth
+          lastCursorOffsetRef.current = cursorOffset
+          lastMaxWidthRef.current = maxVisibleWidth
+        }
+      }
     }
   }, [cursorPos, cursorActive, rawValue])
 
+  type Key = (typeof Keys)[keyof typeof Keys]
   // Input handling
-  const handleInput = (key) => {
+  const handleInput = (key: Key) => {
     switch (key) {
       case Keys.BLANK:
         break
@@ -196,7 +286,7 @@ export function NumericInput({
     }
   }
 
-  const insertCharacter = (key) => {
+  const insertCharacter = (key: Key) => {
     // Use a functional update to ensure we're working with the latest state
     setRawValue((prevRawValue) => {
       const newRawValue = [...prevRawValue]
@@ -271,13 +361,16 @@ export function NumericInput({
   }
 
   // Focus handling
-  const handleFocus = (e) => {
+  const handleFocus = (e: TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
     // If we're touching a specific character, set the cursor there
-    if (e.target.tagName === 'SPAN' && e.target.dataset.index) {
-      const index = +e.target.dataset.index
+    if (
+      (e.target as HTMLElement)?.tagName === 'SPAN' &&
+      (e.target as HTMLElement)?.dataset.index
+    ) {
+      const index = Number((e.target as HTMLElement)?.dataset?.index)
       setCursorPos(isNaN(index) ? rawValue.length : index)
     } else {
       // Otherwise, put cursor at end
@@ -342,24 +435,38 @@ export function NumericInput({
     )
   }
 
-  const closeKeyboard = () => {
+  const closeKeyboard = (skipAnimation = false) => {
     if (!keyboard) {
       return
     }
 
-    // Animate out
+    // Get keyboard elements
     const { root, element } = keyboard
 
-    element.style.transform = 'translateY(100%)'
-
-    // Clean up after animation
-    setTimeout(() => {
+    if (skipAnimation) {
+      // Skip animation for immediate cleanup
       root.unmount()
       if (keyboardContainerRef.current) {
-        document.body.removeChild(keyboardContainerRef.current)
+        if (document.body.contains(keyboardContainerRef.current)) {
+          document.body.removeChild(keyboardContainerRef.current)
+        }
         keyboardContainerRef.current = null
       }
-    }, 300)
+    } else {
+      // Animate out
+      element.style.transform = 'translateY(100%)'
+
+      // Clean up after animation
+      setTimeout(() => {
+        root.unmount()
+        if (keyboardContainerRef.current) {
+          if (document.body.contains(keyboardContainerRef.current)) {
+            document.body.removeChild(keyboardContainerRef.current)
+          }
+          keyboardContainerRef.current = null
+        }
+      }, 300)
+    }
 
     setCursorActive(false)
     setCursorPos(0)
@@ -381,7 +488,13 @@ export function NumericInput({
   }
 
   return (
-    <div ref={inputRef} className={className} onTouchEnd={handleFocus}>
+    <div
+      ref={inputRef}
+      className={className}
+      onTouchEnd={
+        handleFocus as unknown as React.TouchEventHandler<HTMLDivElement>
+      }
+    >
       <div>
         <div className="numeric-input-text">
           {rawValue.map((char, i) => (
