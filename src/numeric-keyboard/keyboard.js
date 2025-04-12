@@ -2,7 +2,7 @@ import React from 'react'
 import { capitalize } from './lib/utils/string.js'
 import { Options, Mixins } from './lib/keyboard.js'
 import { ENTER } from './lib/keys.js'
-import './lib/styles/keyboard.styl'
+import './styles.css'
 
 class Parent extends React.Component {}
 Object.assign(Parent.prototype, Mixins)
