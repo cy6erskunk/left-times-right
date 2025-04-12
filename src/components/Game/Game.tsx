@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-ignore numeric-keyboard/dist/numeric_keyboard.react
 import { NumericInput } from 'numeric-keyboard/dist/numeric_keyboard.react'
 import * as React from 'react'
 
@@ -9,6 +9,7 @@ import {
 } from '../../constants'
 import PreviousTask from '../PreviousTask/PreviousTask'
 import Task from '../Task/Task'
+import { useEffect, useRef, useState } from 'react'
 
 type ExternalProps = {
   score: number
@@ -83,39 +84,32 @@ export const GameScene = (props: Props): React.ReactElement => {
   )
 }
 
-type State = {
-  secondsLeft: number
-}
-class StatefulGameScene extends React.Component<ExternalProps, State> {
-  state: State = { secondsLeft: 5 }
+function StatefulGameScene(
+  props: ExternalProps,
+): React.ReactElement<React.ComponentProps<typeof GameScene>> {
+  const [secondsLeft, setSecondsLeft] = useState<number>(5)
+  const secondsTimeoutIdRef = useRef<number | null>(null)
 
-  componentDidMount: () => void = () => {
-    this.scheduleSecondsUpdate()
+  const updateSeconds = () => {
+    setSecondsLeft((prevSeconds) => prevSeconds - 1)
+    scheduleSecondsUpdate()
   }
-  componentWillUnmount: () => void = () => {
-    if (this.secondsTimeoutId) {
-      clearTimeout(this.secondsTimeoutId)
+
+  const scheduleSecondsUpdate = () => {
+    secondsTimeoutIdRef.current = window.setTimeout(updateSeconds, SECOND_IN_MS)
+  }
+
+  useEffect(() => {
+    scheduleSecondsUpdate()
+
+    return () => {
+      if (secondsTimeoutIdRef.current) {
+        clearTimeout(secondsTimeoutIdRef.current)
+      }
     }
-  }
+  }, [])
 
-  secondsTimeoutId: number | null = null
-
-  scheduleSecondsUpdate: () => void = () => {
-    this.secondsTimeoutId = window.setTimeout(this.updateSeconds, SECOND_IN_MS)
-  }
-
-  updateSeconds: () => void = () => {
-    this.setState(
-      {
-        secondsLeft: this.state.secondsLeft - 1,
-      },
-      this.scheduleSecondsUpdate,
-    )
-  }
-
-  render(): React.ReactElement<React.ComponentProps<typeof GameScene>> {
-    return <GameScene secondsLeft={this.state.secondsLeft} {...this.props} />
-  }
+  return <GameScene secondsLeft={secondsLeft} {...props} />
 }
 
 export default StatefulGameScene
