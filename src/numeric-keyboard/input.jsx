@@ -21,12 +21,18 @@ const KeyboardManager = {
     // Use more reliable document click handler that won't interfere with keyboard events
     this.documentClickHandler = (e) => {
       // Don't close when clicking within input or keyboard
-      if (!this.activeInput) return
+      if (!this.activeInput) {
+        return
+      }
 
       const { inputElement, keyboardElement } = this.activeInput
 
-      if (inputElement && inputElement.contains(e.target)) return
-      if (keyboardElement && keyboardElement.contains(e.target)) return
+      if (inputElement && inputElement.contains(e.target)) {
+        return
+      }
+      if (keyboardElement && keyboardElement.contains(e.target)) {
+        return
+      }
 
       // Safe to close - clicked outside both input and keyboard
       if (this.closeKeyboardFn) {
@@ -121,11 +127,15 @@ export function NumericInput({
 
   // Update cursor position
   useEffect(() => {
-    if (!cursorActive) return
+    if (!cursorActive) {
+      return
+    }
 
     const elCursor = inputRef.current?.querySelector('.numeric-input-cursor')
     const elText = inputRef.current?.querySelector('.numeric-input-text')
-    if (!elCursor || !elText) return
+    if (!elCursor || !elText) {
+      return
+    }
 
     const elCharacter = elText.querySelector(`span:nth-child(${cursorPos})`)
 
@@ -194,14 +204,20 @@ export function NumericInput({
       newRawValue.push(key)
       const newValue = newRawValue.join('')
 
-      if (!formatFnRef.current(newValue)) return prevRawValue
+      if (!formatFnRef.current(newValue)) {
+        return prevRawValue
+      }
 
       if (type === 'number') {
-        if (!RNumber.test(newValue)) return prevRawValue
+        if (!RNumber.test(newValue)) {
+          return prevRawValue
+        }
 
         if (newValue !== '') {
           const parsed = parseFloat(newValue)
-          if (isNaN(parsed)) return prevRawValue
+          if (isNaN(parsed)) {
+            return prevRawValue
+          }
         }
       } else if (
         newValue.length > maxlength ||
@@ -216,15 +232,18 @@ export function NumericInput({
         setCursorPos((current) => current + 1)
       }, 0)
 
-      // Call onInput
-      if (onInput) onInput(newValue)
+      if (onInput) {
+        onInput(newValue)
+      }
 
       return newRawValue
     })
   }
 
   const deleteCharacter = () => {
-    if (cursorPos <= 0) return
+    if (cursorPos <= 0) {
+      return
+    }
 
     // Use a functional update to ensure we're working with the latest state
     setRawValue((prevRawValue) => {
@@ -232,7 +251,9 @@ export function NumericInput({
       newRawValue.splice(cursorPos - 1, 1)
       const newValue = newRawValue.join('')
 
-      if (!formatFnRef.current(newValue)) return prevRawValue
+      if (!formatFnRef.current(newValue)) {
+        return prevRawValue
+      }
 
       // Update cursor position on success
       // Need to use setTimeout to ensure state is updated correctly
@@ -241,7 +262,9 @@ export function NumericInput({
       }, 0)
 
       // Call onInput
-      if (onInput) onInput(newValue)
+      if (onInput) {
+        onInput(newValue)
+      }
 
       return newRawValue
     })
@@ -267,7 +290,9 @@ export function NumericInput({
 
   // Keyboard management
   const openKeyboard = () => {
-    if (keyboard || readonly || disabled) return
+    if (keyboard || readonly || disabled) {
+      return
+    }
 
     // Create container for the keyboard
     const container = document.createElement('div')
@@ -303,7 +328,9 @@ export function NumericInput({
     setCursorPos(rawValue.length)
     setKeyboard({ root, element: keyboardEl })
 
-    if (onFocus) onFocus()
+    if (onFocus) {
+      onFocus()
+    }
 
     // Register with manager
     KeyboardManager.register(
@@ -316,7 +343,9 @@ export function NumericInput({
   }
 
   const closeKeyboard = () => {
-    if (!keyboard) return
+    if (!keyboard) {
+      return
+    }
 
     // Animate out
     const { root, element } = keyboard
@@ -336,14 +365,20 @@ export function NumericInput({
     setCursorPos(0)
     setKeyboard(null)
 
-    if (onBlur) onBlur()
+    if (onBlur) {
+      onBlur()
+    }
     KeyboardManager.unregister()
   }
 
   // Render
   let className = 'numeric-input'
-  if (readonly) className += ' readonly'
-  if (disabled) className += ' disabled'
+  if (readonly) {
+    className += ' readonly'
+  }
+  if (disabled) {
+    className += ' disabled'
+  }
 
   return (
     <div ref={inputRef} className={className} onTouchEnd={handleFocus}>
