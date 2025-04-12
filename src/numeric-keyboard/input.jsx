@@ -70,9 +70,9 @@ export function NumericInput({
   format = '^',
   layout = 'number',
   entertext = 'enter',
+  onFocus = undefined,
+  onBlur = undefined,
   onInput,
-  onFocus,
-  onBlur,
   onEnterpress,
 }) {
   // Parse the format option
