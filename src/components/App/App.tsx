@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   GAME_TIMEOUT_IN_MS,
@@ -7,6 +8,7 @@ import {
   TOP_SCORE_KEY,
 } from '../../constants'
 import { generateDigit } from '../../helpers'
+import { KeyboardManager } from '../../numeric-keyboard/input'
 import EndScene from '../End/End'
 import GameScene from '../Game/Game'
 import StartScene from '../Start/Start'
@@ -29,142 +31,103 @@ export const scenes = {
   END: EndScene,
 } as const
 
-type Props = Record<any, any>
-type State = {
-  left: number
-  right: number
-  prevLeft: number
-  prevRight: number
-  score: number
-  showEmoji: boolean
-  isLove: boolean
-  hearts: number | null | undefined
-}
+function App() {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const emojiRef = useRef<HTMLDivElement>(null)
+  const timerRef = useRef<number | null>(null)
 
-class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-
-    this.inputRef = React.createRef()
-    this.emojiRef = React.createRef()
-
-    if (localStorage.getItem('score') === null) {
-      localStorage.setItem('score', String(INITIAL_SCORE))
-    }
-
-    this.state = {
-      left: generateDigit(),
-      right: generateDigit(),
-      prevLeft: -Infinity,
-      prevRight: -Infinity,
-      score: parseInt(localStorage.getItem('score') || '0', 10),
-      showEmoji: false,
-      isLove: true,
-      hearts: null,
-    }
+  if (localStorage.getItem('score') === null) {
+    localStorage.setItem('score', String(INITIAL_SCORE))
   }
 
-  timer: number | null = null
-  inputRef: React.RefObject<HTMLInputElement>
-  emojiRef: React.RefObject<HTMLDivElement>
+  const [left, setLeft] = useState(generateDigit())
+  const [right, setRight] = useState(generateDigit())
+  const [prevLeft, setPrevLeft] = useState(-Infinity)
+  const [prevRight, setPrevRight] = useState(-Infinity)
+  const [score, setScore] = useState(
+    parseInt(localStorage.getItem('score') || '0', 10),
+  )
+  const [showEmoji, setShowEmoji] = useState(false)
+  const [isLove, setIsLove] = useState(true)
+  const [hearts, setHearts] = useState<number | null | undefined>(null)
 
-  goToGame: () => void = () => {
-    this.setState({
-      hearts: 3,
-      score: 0,
-      showEmoji: false,
-    })
+  const goToGame = () => {
+    // Clean up any existing keyboard before changing scenes
+    KeyboardManager.cleanup()
+
+    setHearts(3)
+    setScore(0)
+    setShowEmoji(false)
   }
 
-  getValue: () => number = () =>
-    parseInt(this.inputRef?.current?.value || '0', 10)
+  const getValue = (): number => parseInt(inputRef?.current?.value || '0', 10)
 
-  updateScore: () => void = () =>
-    this.setState((state) => {
-      const newState = {
-        left: generateDigit(),
-        right: generateDigit(),
-      } as const
-      const isLove = state.left * state.right === this.getValue()
-
-      const newScore = isLove ? state.score + 1 : state.score
-      localStorage.setItem('score', String(newScore))
-      const newHearts = state.hearts
-        ? isLove
-          ? state.hearts
-          : state.hearts - 1
-        : 0
-      if (newHearts > 0) {
-        return {
-          ...newState,
-          score: newScore,
-          hearts: newHearts,
-          showEmoji: true,
-          isLove,
-        }
-      } else {
-        setTopScore(String(newScore))
-        return {
-          ...newState,
-          isLove: false,
-          score: newScore,
-          hearts: 0,
-          showEmoji: false,
-        }
-      }
-    }, this.resetInput)
-
-  resetInput: () => void = () => {
-    if (this.inputRef && this.inputRef.current) {
-      this.inputRef.current.value = ''
+  const resetInput = (): void => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.value = ''
     }
   }
 
-  onFocus: () => void = () => {
+  const updateScore = (): void => {
+    const newLeft = generateDigit()
+    const newRight = generateDigit()
+    setPrevLeft(left)
+    setPrevRight(right)
+    setLeft(newLeft)
+    setRight(newRight)
+
+    const currentValue = getValue()
+    const isCurrentLove = left * right === currentValue
+
+    const newScore = isCurrentLove ? score + 1 : score
+    localStorage.setItem('score', String(newScore))
+    setScore(newScore)
+
+    const newHearts = hearts ? (isCurrentLove ? hearts : hearts - 1) : 0
+    setHearts(newHearts)
+
+    if (newHearts > 0) {
+      setShowEmoji(true)
+      setIsLove(isCurrentLove)
+    } else {
+      KeyboardManager.cleanup()
+      setPrevLeft(-Infinity)
+      setPrevRight(-Infinity)
+      setTopScore(String(newScore))
+      setShowEmoji(false)
+      setIsLove(false)
+    }
+
+    resetInput()
+  }
+
+  const onFocus = (): void => {
     window.scrollTo(0, 0)
     if (document.body) {
       document.body.scrollTop = 0
     }
   }
 
-  onSubmitTask: (e: Event) => void = (_e: Event) => {
-    if (
-      this.inputRef &&
-      this.inputRef.current &&
-      this.inputRef.current.checkValidity()
-    ) {
-      this.updateScore()
+  const onSubmitTask = (): void => {
+    if (inputRef && inputRef.current && inputRef.current.checkValidity()) {
+      updateScore()
     }
   }
 
-  onAnimationEnd: () => void = () => {
-    if (this.emojiRef && this.emojiRef.current) {
-      this.emojiRef.current.removeEventListener(
-        'animationend',
-        this.onAnimationEnd,
-      )
+  const onAnimationEnd = (): void => {
+    if (emojiRef && emojiRef.current) {
+      emojiRef.current.removeEventListener('animationend', onAnimationEnd)
     }
-    this.setState({
-      showEmoji: false,
-    })
+    setShowEmoji(false)
   }
 
-  renderGameScene: () => React.ReactElement = () => {
-    const {
-      left,
-      right,
-      prevLeft,
-      prevRight,
-      score,
-      showEmoji,
-      isLove,
-      hearts,
-    } = this.state
-    if (this.timer) {
-      clearTimeout(this.timer)
-      this.timer = null
+  const renderGameScene = (): React.JSX.Element => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
     }
-    this.timer = window.setTimeout(this.updateScore, GAME_TIMEOUT_IN_MS)
+    timerRef.current = window.setTimeout(updateScore, GAME_TIMEOUT_IN_MS)
+
     return (
       <GameScene
         key={[left, right, score].join('-')}
@@ -176,31 +139,38 @@ class App extends React.Component<Props, State> {
         showEmoji={showEmoji}
         isLove={isLove}
         hearts={hearts || INITIAL_HEARTS}
-        inputRef={this.inputRef}
-        emojiRef={this.emojiRef}
-        onAnimationEnd={this.onAnimationEnd}
-        onSubmitTask={this.onSubmitTask}
-        onFocus={this.onFocus}
+        inputRef={inputRef}
+        emojiRef={emojiRef}
+        onAnimationEnd={onAnimationEnd}
+        onSubmitTask={onSubmitTask}
+        onFocus={onFocus}
       />
     )
   }
 
-  render(): React.ReactElement {
-    const { score, hearts } = this.state
-    return (
-      <div className="App" role="main">
-        <React.StrictMode>
-          {hearts === null ? (
-            <StartScene onClick={this.goToGame} topScore={getTopScore()} />
-          ) : hearts != null && hearts > 0 ? (
-            this.renderGameScene()
-          ) : (
-            <EndScene score={score} onClick={this.goToGame} />
-          )}
-        </React.StrictMode>
-      </div>
-    )
-  }
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+      KeyboardManager.cleanup()
+    }
+  }, [])
+
+  return (
+    <div className="App" role="main">
+      <React.StrictMode>
+        {hearts === null ? (
+          <StartScene onClick={goToGame} topScore={getTopScore()} />
+        ) : hearts != null && hearts > 0 ? (
+          renderGameScene()
+        ) : (
+          <EndScene score={score} onClick={goToGame} />
+        )}
+      </React.StrictMode>
+    </div>
+  )
 }
 
 export default App

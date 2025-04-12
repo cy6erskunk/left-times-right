@@ -107,7 +107,7 @@
       }
     },
     {
-      "include": ["src/registerServiceWorker.js"],
+      "include": ["src/registerServiceWorker.js", "src/helpers.ts"],
       "linter": {
         "rules": {
           "suspicious": {

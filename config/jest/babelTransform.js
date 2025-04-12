@@ -1,21 +1,21 @@
-'use strict';
+'use strict'
 
-import babelJest from 'babel-jest';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import { createRequire } from 'module'
+import babelJest from 'babel-jest'
+const require = createRequire(import.meta.url)
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
-    return false;
+    return false
   }
 
   try {
-    require.resolve('react/jsx-runtime');
-    return true;
-  } catch (e) {
-    return false;
+    require.resolve('react/jsx-runtime')
+    return true
+  } catch (_e) {
+    return false
   }
-})();
+})()
 
 export default babelJest.createTransformer({
   presets: [
@@ -28,4 +28,4 @@ export default babelJest.createTransformer({
   ],
   babelrc: false,
   configFile: false,
-});
+})
