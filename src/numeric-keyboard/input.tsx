@@ -158,7 +158,7 @@ export function NumericInput({
 
   // State
   const [rawValue, setRawValue] = useState(value.toString().split(''))
-  const [cursorPos, setCursorPos] = useState(value.toString().length)
+  const cursorPosRef = useRef<number>(value.toString().length)
   const [cursorActive, setCursorActive] = useState(false)
   const [cursorColor, setCursorColor] = useState<string>('')
   const [keyboard, setKeyboard] = useState<{
@@ -178,7 +178,7 @@ export function NumericInput({
     if (value.toString() !== rawValue.join('')) {
       const newRawValue = value.toString().split('')
       setRawValue(newRawValue)
-      setCursorPos(newRawValue.length)
+      cursorPosRef.current = newRawValue.length
     }
   }, [value])
 
@@ -224,7 +224,7 @@ export function NumericInput({
     )
     if (elCursor && elText) {
       const elCharacter = elText.querySelector<HTMLElement>(
-        `span:nth-child(${cursorPos})`,
+        `span:nth-child(${cursorPosRef.current})`,
       )
 
       if (!elCharacter) {
@@ -247,7 +247,7 @@ export function NumericInput({
         }
       }
     }
-  }, [cursorPos, cursorActive, rawValue])
+  }, [cursorPosRef.current, cursorActive, rawValue])
 
   type Key = (typeof Keys)[keyof typeof Keys]
   // Input handling
@@ -265,7 +265,7 @@ export function NumericInput({
         }
         break
       case Keys.DEL:
-        if (cursorPos > 0) {
+        if (cursorPosRef.current > 0) {
           deleteCharacter()
         }
         break
@@ -319,7 +319,7 @@ export function NumericInput({
       // Update cursor position on success
       // Need to use setTimeout to ensure state is updated correctly
       setTimeout(() => {
-        setCursorPos((current) => current + 1)
+        cursorPosRef.current += 1
       }, 0)
 
       if (onInput) {
@@ -331,14 +331,14 @@ export function NumericInput({
   }
 
   const deleteCharacter = () => {
-    if (cursorPos <= 0) {
+    if (cursorPosRef.current <= 0) {
       return
     }
 
     // Use a functional update to ensure we're working with the latest state
     setRawValue((prevRawValue) => {
       const newRawValue = [...prevRawValue]
-      newRawValue.splice(cursorPos - 1, 1)
+      newRawValue.splice(cursorPosRef.current - 1, 1)
       const newValue = newRawValue.join('')
 
       if (!formatFnRef.current(newValue)) {
@@ -348,7 +348,7 @@ export function NumericInput({
       // Update cursor position on success
       // Need to use setTimeout to ensure state is updated correctly
       setTimeout(() => {
-        setCursorPos((current) => current - 1)
+        cursorPosRef.current -= 1
       }, 0)
 
       // Call onInput
@@ -371,10 +371,11 @@ export function NumericInput({
       (e.target as HTMLElement)?.dataset.index
     ) {
       const index = Number((e.target as HTMLElement)?.dataset?.index)
-      setCursorPos(isNaN(index) ? rawValue.length : index)
+      const newCursorPos = isNaN(index) ? rawValue.length : index
+      cursorPosRef.current = newCursorPos
     } else {
       // Otherwise, put cursor at end
-      setCursorPos(rawValue.length)
+      cursorPosRef.current = rawValue.length
     }
 
     // Always open keyboard when focused
@@ -418,7 +419,7 @@ export function NumericInput({
     }, 10)
 
     setCursorActive(true)
-    setCursorPos(rawValue.length)
+    cursorPosRef.current = rawValue.length
     setKeyboard({ root, element: keyboardEl })
 
     if (onFocus) {
@@ -469,7 +470,8 @@ export function NumericInput({
     }
 
     setCursorActive(false)
-    setCursorPos(0)
+    cursorPosRef.current = 0
+    rawValue.length
     setKeyboard(null)
 
     if (onBlur) {
