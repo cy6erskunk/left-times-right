@@ -4,6 +4,7 @@ import { NumericInput } from '../../numeric-keyboard/index'
 import { useEffect, useRef, useState } from 'react'
 import {
   CORRECT_ANSWER_EMOJI,
+  GAME_TIMEOUT_IN_MS,
   INCORRECT_ANSWER_EMOJI,
   SECOND_IN_MS,
 } from '../../constants'
@@ -86,7 +87,9 @@ export const GameScene = (props: Props): React.ReactElement => {
 function StatefulGameScene(
   props: ExternalProps,
 ): React.ReactElement<React.ComponentProps<typeof GameScene>> {
-  const [secondsLeft, setSecondsLeft] = useState<number>(5)
+  const [secondsLeft, setSecondsLeft] = useState<number>(
+    GAME_TIMEOUT_IN_MS / SECOND_IN_MS,
+  )
   const secondsTimeoutIdRef = useRef<number | null>(null)
 
   const updateSeconds = () => {
