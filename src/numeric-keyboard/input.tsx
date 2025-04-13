@@ -471,7 +471,6 @@ export function NumericInput({
 
     setCursorActive(false)
     cursorPosRef.current = 0
-    rawValue.length
     setKeyboard(null)
 
     if (onBlur) {
