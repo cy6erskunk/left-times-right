@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, TouchEventHandler } from 'react'
 import { createPortal } from 'react-dom'
 import { NumericKeyboard } from './keyboard.jsx'
 import * as Keys from './lib/keys.js'
@@ -7,6 +7,23 @@ import './lib/styles/styles.css'
 // Regular expressions for validation
 const RNumber = /^\d*(?:\.\d*)?$/
 const RTel = /^\d*$/
+
+interface NumericInputProps {
+  type?: 'number' | 'tel'
+  value?: string
+  autofocus?: boolean
+  disabled?: boolean
+  readonly?: boolean
+  maxlength?: number
+  placeholder?: string
+  format?: string | ((val: string) => boolean)
+  layout?: string
+  entertext?: string
+  onFocus?: () => void
+  onBlur?: () => void
+  onInput?: (value: string) => void
+  onEnterpress?: () => void
+}
 
 export function NumericInput({
   type = 'number',
@@ -19,11 +36,11 @@ export function NumericInput({
   format = '^',
   layout = 'number',
   entertext = 'enter',
-  onFocus = () => {},
-  onBlur = () => {},
+  onFocus,
+  onBlur,
   onInput,
   onEnterpress,
-}) {
+}: NumericInputProps) {
   // State
   const [rawValue, setRawValue] = useState(value.toString().split(''))
   const [cursorPos, setCursorPos] = useState(value.toString().length)
@@ -32,16 +49,20 @@ export function NumericInput({
   const [keyboardVisible, setKeyboardVisible] = useState(false)
 
   // Refs
-  const inputRef = useRef(null)
-  const keyboardContainerRef = useRef(null)
-  const lastCursorOffsetRef = useRef(null)
-  const lastMaxWidthRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const keyboardContainerRef = useRef<HTMLDivElement | null>(null)
+  const lastCursorOffsetRef = useRef<number | null>(
+    null,
+  ) as React.MutableRefObject<number | null>
+  const lastMaxWidthRef = useRef<number | null>(null) as React.MutableRefObject<
+    number | null
+  >
 
   // Format function
   const formatFn =
     typeof format === 'function'
       ? format
-      : (val) => new RegExp(format).test(val)
+      : (val: string) => new RegExp(format).test(val)
 
   // Update value when props change
   useEffect(() => {
@@ -68,14 +89,16 @@ export function NumericInput({
 
   // Handle click outside to close keyboard
   useEffect(() => {
-    if (!keyboardVisible) return
+    if (!keyboardVisible) {
+      return
+    }
 
-    const handleClickOutside = (e) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
         inputRef.current &&
-        !inputRef.current.contains(e.target) &&
+        !inputRef.current.contains(e.target as Node) &&
         keyboardContainerRef.current &&
-        !keyboardContainerRef.current.contains(e.target)
+        !keyboardContainerRef.current.contains(e.target as Node)
       ) {
         closeKeyboard()
       }
@@ -94,13 +117,21 @@ export function NumericInput({
 
   // Update cursor position when cursor is active or value changes
   useEffect(() => {
-    if (!cursorActive) return
+    if (!cursorActive) {
+      return
+    }
 
-    const elCursor = inputRef.current?.querySelector('.numeric-input-cursor')
-    const elText = inputRef.current?.querySelector('.numeric-input-text')
+    const elCursor = inputRef.current?.querySelector(
+      '.numeric-input-cursor',
+    ) as HTMLElement | null
+    const elText = inputRef.current?.querySelector(
+      '.numeric-input-text',
+    ) as HTMLElement | null
 
     if (elCursor && elText) {
-      const elCharacter = elText.querySelector(`span:nth-child(${cursorPos})`)
+      const elCharacter = elText.querySelector(
+        `span:nth-child(${cursorPos})`,
+      ) as HTMLElement | null
 
       if (!elCharacter) {
         elCursor.style.transform = 'translateX(0)'
@@ -108,7 +139,7 @@ export function NumericInput({
         return
       } else {
         const cursorOffset = elCharacter.offsetLeft + elCharacter.offsetWidth
-        const maxVisibleWidth = elText.parentNode?.offsetWidth
+        const maxVisibleWidth = (elText.parentNode as HTMLElement)?.offsetWidth
 
         if (
           lastCursorOffsetRef.current !== cursorOffset ||
@@ -125,7 +156,7 @@ export function NumericInput({
   }, [cursorPos, cursorActive, rawValue])
 
   // Keyboard handlers
-  const handleInput = (key) => {
+  const handleInput = (key: (typeof Keys)[keyof typeof Keys]) => {
     switch (key) {
       case Keys.BLANK:
         break
@@ -160,7 +191,7 @@ export function NumericInput({
     }
   }
 
-  const insertCharacter = (key) => {
+  const insertCharacter = (key: string) => {
     const newRawValue = [...rawValue]
     // Instead of inserting at cursor position, append to the end
     newRawValue.push(key)
@@ -225,13 +256,14 @@ export function NumericInput({
   }
 
   // Focus handling
-  const handleFocus = (e) => {
+  const handleFocus: TouchEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault()
     e.stopPropagation()
 
     // If we're touching a specific character, set the cursor there
-    if (e.target?.tagName === 'SPAN' && e.target?.dataset.index) {
-      const index = Number(e.target?.dataset?.index)
+    const target = e.target as HTMLElement
+    if (target?.tagName === 'SPAN' && target?.dataset.index) {
+      const index = Number(target?.dataset?.index)
       const newCursorPos = isNaN(index) ? rawValue.length : index
       setCursorPos(newCursorPos)
     } else {
@@ -270,7 +302,9 @@ export function NumericInput({
 
   // Render keyboard with Portal
   const renderKeyboard = () => {
-    if (!keyboardVisible) return null
+    if (!keyboardVisible) {
+      return null
+    }
 
     return createPortal(
       <div className="numeric-keyboard-actionsheet" ref={keyboardContainerRef}>
