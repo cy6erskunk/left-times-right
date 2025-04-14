@@ -8,7 +8,6 @@ import {
   TOP_SCORE_KEY,
 } from '../../constants'
 import { generateDigit } from '../../helpers'
-import { KeyboardManager } from '../../numeric-keyboard/input'
 import EndScene from '../End/End'
 import GameScene from '../Game/Game'
 import StartScene from '../Start/Start'
@@ -53,7 +52,6 @@ function App() {
 
   const goToGame = () => {
     // Clean up any existing keyboard before changing scenes
-    KeyboardManager.cleanup()
 
     setHearts(3)
     setScore(0)
@@ -90,7 +88,6 @@ function App() {
       setShowEmoji(true)
       setIsLove(isCurrentLove)
     } else {
-      KeyboardManager.cleanup()
       setPrevLeft(-Infinity)
       setPrevRight(-Infinity)
       setTopScore(String(newScore))
@@ -154,7 +151,6 @@ function App() {
         clearTimeout(timerRef.current)
         timerRef.current = null
       }
-      KeyboardManager.cleanup()
     }
   }, [])
 
