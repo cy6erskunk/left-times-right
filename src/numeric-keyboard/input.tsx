@@ -318,7 +318,7 @@ export function NumericInput({
         >
           <NumericKeyboard
             layout={layout || type}
-            entertext={entertext}
+            enterText={entertext}
             onPress={handleInput}
           />
         </div>

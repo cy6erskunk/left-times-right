@@ -7,15 +7,15 @@ type LayoutType = string | KeyboardCell[][]
 
 interface NumericKeyboardProps {
   layout?: LayoutType // Can be a string (key for built-in layouts) or a custom 2D array
-  entertext?: string // Text for the enter key
-  onEnterpress?: (() => void) | undefined // Optional callback for enter key press
+  enterText?: string // Text for the enter key
+  onEnterPress?: (() => void) | undefined // Optional callback for enter key press
   onPress: (key: string) => void // Callback for key press
 }
 
 export function NumericKeyboard({
   layout = 'number',
-  entertext = 'enter',
-  onEnterpress = undefined,
+  enterText = 'enter',
+  onEnterPress = undefined,
   onPress,
 }: NumericKeyboardProps) {
   // Get the proper layout based on the prop value
@@ -52,8 +52,8 @@ export function NumericKeyboard({
       onPress(key)
     }
 
-    if (key === ENTER && onEnterpress) {
-      onEnterpress()
+    if (key === ENTER && onEnterPress) {
+      onEnterPress()
     }
   }
 
@@ -68,7 +68,7 @@ export function NumericKeyboard({
                 rowSpan={cell.rowspan}
                 colSpan={cell.colspan}
                 data-key={cell.key}
-                data-icon={cell.key === ENTER ? entertext : cell.key}
+                data-icon={cell.key === ENTER ? enterText : cell.key}
                 className="numeric-keyboard-key"
                 onMouseDown={(e) => {
                   e.preventDefault()
