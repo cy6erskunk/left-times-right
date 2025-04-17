@@ -1,15 +1,25 @@
 import React from 'react'
-import { ENTER } from './lib/keys.js'
-import Layouts from './lib/layouts/index.js'
+import { ENTER } from './lib/keys'
+import Layouts from './lib/layouts/index'
+import { KeyboardCell } from './lib/layouts/types'
+
+type LayoutType = string | KeyboardCell[][]
+
+interface NumericKeyboardProps {
+  layout?: LayoutType // Can be a string (key for built-in layouts) or a custom 2D array
+  enterText?: string // Text for the enter key
+  onEnterPress?: (() => void) | undefined // Optional callback for enter key press
+  onPress: (key: string) => void // Callback for key press
+}
 
 export function NumericKeyboard({
   layout = 'number',
-  entertext = 'enter',
-  onEnterpress = undefined,
+  enterText = 'enter',
+  onEnterPress = undefined,
   onPress,
-}) {
+}: NumericKeyboardProps) {
   // Get the proper layout based on the prop value
-  let resolvedLayout
+  let resolvedLayout: KeyboardCell[][]
   if (typeof layout === 'string') {
     resolvedLayout = Layouts[layout]
     if (!Array.isArray(resolvedLayout)) {
@@ -26,12 +36,14 @@ export function NumericKeyboard({
   }
 
   // Handle key press event
-  const handleKeyPress = (key, event) => {
+  const handleKeyPress = (
+    key: string,
+    event: React.MouseEvent | React.TouchEvent,
+  ) => {
     if (event) {
       event.preventDefault()
       // Don't stop propagation for normal key presses to allow multiple inputs
       if (key === ENTER) {
-        // Only stop propagation for ENTER to prevent form submission
         event.nativeEvent.stopImmediatePropagation()
       }
     }
@@ -40,8 +52,8 @@ export function NumericKeyboard({
       onPress(key)
     }
 
-    if (key === ENTER && onEnterpress) {
-      onEnterpress()
+    if (key === ENTER && onEnterPress) {
+      onEnterPress()
     }
   }
 
@@ -56,10 +68,9 @@ export function NumericKeyboard({
                 rowSpan={cell.rowspan}
                 colSpan={cell.colspan}
                 data-key={cell.key}
-                data-icon={cell.key === ENTER ? entertext : cell.key}
+                data-icon={cell.key === ENTER ? enterText : cell.key}
                 className="numeric-keyboard-key"
                 onMouseDown={(e) => {
-                  // Prevent default behavior
                   e.preventDefault()
                 }}
                 onTouchStart={(e) => {
@@ -68,7 +79,6 @@ export function NumericKeyboard({
                   e.currentTarget.classList.add('active')
                 }}
                 onTouchEnd={(e) => {
-                  // Process key on touch end
                   e.preventDefault()
                   e.stopPropagation()
                   e.currentTarget.classList.remove('active')

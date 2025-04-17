@@ -1,5 +1,5 @@
-import * as Keys from './lib/keys.js'
+import * as Keys from './lib/keys'
 
-export * from './keyboard.jsx'
+export * from './keyboard'
 export * from './input'
 export { Keys }
