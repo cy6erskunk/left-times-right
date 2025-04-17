@@ -1,6 +1,7 @@
-import * as Keys from '../keys.js'
+import * as Keys from '../keys'
+import { KeyboardLayout } from './types'
 
-export default [
+const telLayout: KeyboardLayout = [
   [
     {
       key: Keys.ONE,
@@ -46,3 +47,5 @@ export default [
     },
   ],
 ]
+
+export default telLayout

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, TouchEventHandler } from 'react'
 import { createPortal } from 'react-dom'
-import { NumericKeyboard } from './keyboard.jsx'
-import * as Keys from './lib/keys.js'
+import { NumericKeyboard } from './keyboard'
+import * as Keys from './lib/keys'
 import './lib/styles/styles.css'
 
 // Regular expressions for validation
