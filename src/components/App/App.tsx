@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from 'react'
 
 import {
   GAME_TIMEOUT_IN_MS,
+  GAMES_WON_KEY,
   INITIAL_HEARTS,
   INITIAL_SCORE,
   TOP_SCORE_KEY,
 } from '../../constants'
-import { generateDigit } from '../../helpers'
+import { generateAllPairs } from '../../helpers'
 import EndScene from '../End/End'
 import GameScene from '../Game/Game'
 import StartScene from '../Start/Start'
@@ -35,27 +36,31 @@ function App() {
   const emojiRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<number | null>(null)
 
-  if (localStorage.getItem('score') === null) {
-    localStorage.setItem('score', String(INITIAL_SCORE))
-  }
 
-  const [left, setLeft] = useState(generateDigit())
-  const [right, setRight] = useState(generateDigit())
+  const [pairs, setPairs] = useState<[number, number][]>(generateAllPairs())
+  const [currentPair, setCurrentPair] = useState<[number, number]>(() => {
+    const all = generateAllPairs()
+    return all[Math.floor(Math.random() * all.length)]
+  })
   const [prevLeft, setPrevLeft] = useState(-Infinity)
   const [prevRight, setPrevRight] = useState(-Infinity)
-  const [score, setScore] = useState(
-    parseInt(localStorage.getItem('score') || '0', 10),
-  )
+  const [score, setScore] = useState(INITIAL_SCORE)
   const [showEmoji, setShowEmoji] = useState(false)
   const [isLove, setIsLove] = useState(true)
   const [hearts, setHearts] = useState<number | null | undefined>(null)
+  const [gamesWon, setGamesWon] = useState(
+    parseInt(localStorage.getItem(GAMES_WON_KEY) || '0', 10),
+  )
+
+
 
   const goToGame = () => {
-    // Clean up any existing keyboard before changing scenes
-
-    setHearts(3)
-    setScore(0)
+    setHearts(INITIAL_HEARTS)
+    setScore(INITIAL_SCORE)
     setShowEmoji(false)
+    const allPairs = generateAllPairs()
+    setPairs(allPairs)
+    setCurrentPair(pickRandomPair(allPairs))
   }
 
   const getValue = (): number => parseInt(inputRef?.current?.value || '0', 10)
@@ -67,26 +72,45 @@ function App() {
   }
 
   const updateScore = (): void => {
-    const newLeft = generateDigit()
-    const newRight = generateDigit()
+    const [left, right] = currentPair
     setPrevLeft(left)
     setPrevRight(right)
-    setLeft(newLeft)
-    setRight(newRight)
 
     const currentValue = getValue()
     const isCurrentLove = left * right === currentValue
-
     const newScore = isCurrentLove ? score + 1 : score
-    localStorage.setItem('score', String(newScore))
-    setScore(newScore)
-
     const newHearts = hearts ? (isCurrentLove ? hearts : hearts - 1) : 0
+    let newPairs = pairs
+
+    if (isCurrentLove) {
+      newPairs = pairs.filter(
+        ([l, r]) => !(l === left && r === right),
+      )
+    }
+
+    setScore(newScore)
     setHearts(newHearts)
+    setPairs(newPairs)
+
+    if (isCurrentLove && newPairs.length === 0) {
+      const updatedGamesWon = gamesWon + 1
+      setGamesWon(updatedGamesWon)
+      localStorage.setItem(GAMES_WON_KEY, String(updatedGamesWon))
+      setShowEmoji(false)
+      setIsLove(true)
+      setPrevLeft(-Infinity)
+      setPrevRight(-Infinity)
+      setTimeout(() => setHearts(null), 1000) // Show win for a moment, then go to end
+      resetInput()
+      return
+    }
 
     if (newHearts > 0) {
       setShowEmoji(true)
       setIsLove(isCurrentLove)
+      if (newPairs.length > 0) {
+        setCurrentPair(pickRandomPair(newPairs))
+      }
     } else {
       setPrevLeft(-Infinity)
       setPrevRight(-Infinity)
@@ -125,6 +149,8 @@ function App() {
     }
     timerRef.current = window.setTimeout(updateScore, GAME_TIMEOUT_IN_MS)
 
+    const [left, right] = currentPair
+
     return (
       <GameScene
         key={[left, right, score].join('-')}
@@ -158,11 +184,15 @@ function App() {
     <div className="App" role="main">
       <React.StrictMode>
         {hearts === null ? (
-          <StartScene onClick={goToGame} topScore={getTopScore()} />
+          <StartScene
+            onClick={goToGame}
+            topScore={getTopScore()}
+            gamesWon={gamesWon}
+          />
         ) : hearts != null && hearts > 0 ? (
           renderGameScene()
         ) : (
-          <EndScene score={score} onClick={goToGame} />
+          <EndScene score={score} onClick={goToGame} gamesWon={gamesWon} />
         )}
       </React.StrictMode>
     </div>
