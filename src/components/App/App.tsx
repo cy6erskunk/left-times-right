@@ -8,7 +8,7 @@ import {
   INITIAL_SCORE,
   TOP_SCORE_KEY,
 } from '../../constants'
-import { generateAllPairs } from '../../helpers'
+import { generateAllPairs, pickRandomPair } from '../../helpers'
 import EndScene from '../End/End'
 import GameScene from '../Game/Game'
 import StartScene from '../Start/Start'
