@@ -6,7 +6,10 @@ export const generateDigit = (): number =>
 export const logError = (error: Error, info: ErrorInfo): void =>
   console.error(error, info.componentStack)
 
-export function generateAllPairs(min = MIN_NUMBER, max = MAX_NUMBER): [number, number][] {
+export function generateAllPairs(
+  min = MIN_NUMBER,
+  max = MAX_NUMBER,
+): [number, number][] {
   const pairs: [number, number][] = []
   for (let i = min; i <= max; i++) {
     for (let j = min; j <= max; j++) {

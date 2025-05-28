@@ -8,8 +8,11 @@ interface StartSceneProps {
   gamesWon: number
 }
 
-
-const StartScene: React.FC<StartSceneProps> = ({ onClick, topScore, gamesWon }) => (
+const StartScene: React.FC<StartSceneProps> = ({
+  onClick,
+  topScore,
+  gamesWon,
+}) => (
   <div className={'startScene'} role="group" aria-label="start">
     <button onClick={onClick} className={'startButton'}>
       {'START'}

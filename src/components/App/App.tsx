@@ -2,8 +2,8 @@ import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import {
-  GAME_TIMEOUT_IN_MS,
   GAMES_WON_KEY,
+  GAME_TIMEOUT_IN_MS,
   INITIAL_HEARTS,
   INITIAL_SCORE,
   TOP_SCORE_KEY,
@@ -36,7 +36,6 @@ function App() {
   const emojiRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<number | null>(null)
 
-
   const [pairs, setPairs] = useState<[number, number][]>(generateAllPairs())
   const [currentPair, setCurrentPair] = useState<[number, number]>(() => {
     const all = generateAllPairs()
@@ -51,8 +50,6 @@ function App() {
   const [gamesWon, setGamesWon] = useState(
     parseInt(localStorage.getItem(GAMES_WON_KEY) || '0', 10),
   )
-
-
 
   const goToGame = () => {
     setHearts(INITIAL_HEARTS)
@@ -83,9 +80,7 @@ function App() {
     let newPairs = pairs
 
     if (isCurrentLove) {
-      newPairs = pairs.filter(
-        ([l, r]) => !(l === left && r === right),
-      )
+      newPairs = pairs.filter(([l, r]) => !(l === left && r === right))
     }
 
     setScore(newScore)
