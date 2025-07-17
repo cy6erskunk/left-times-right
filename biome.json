@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,30 +7,28 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": []
+    "includes": ["**"]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": false,
       "complexity": {
         "noExtraBooleanCast": "error",
-        "noMultipleSpacesInRegularExpressionLiterals": "error",
         "noUselessLoneBlockStatements": "error",
         "noUselessStringConcat": "error",
         "noUselessTernary": "error",
         "noUselessUndefinedInitialization": "error",
         "noVoid": "error",
-        "noWith": "error",
-        "useLiteralKeys": "error"
+        "useLiteralKeys": "error",
+        "noAdjacentSpacesInRegex": "error",
+        "noCommaOperator": "error"
       },
       "correctness": {
         "noConstantCondition": "error",
@@ -42,14 +40,13 @@
         "noUndeclaredVariables": "error",
         "noUnreachable": "error",
         "noUnusedVariables": "error",
-        "useArrayLiterals": "error",
-        "useIsNan": "error"
+        "useIsNan": "error",
+        "useValidTypeof": "error"
       },
       "security": {
         "noGlobalEval": "error"
       },
       "style": {
-        "noCommaOperator": "error",
         "noNegationElse": "off",
         "noParameterAssign": "error",
         "noYodaExpression": "error",
@@ -58,7 +55,8 @@
         "useConsistentBuiltinInstantiation": "error",
         "useDefaultSwitchClause": "error",
         "useShorthandAssign": "error",
-        "useSingleVarDeclarator": "error"
+        "useSingleVarDeclarator": "error",
+        "useArrayLiterals": "error"
       },
       "suspicious": {
         "noCatchAssign": "error",
@@ -77,7 +75,7 @@
         "noSelfCompare": "error",
         "noShadowRestrictedNames": "error",
         "noSparseArray": "error",
-        "useValidTypeof": "error"
+        "noWith": "error"
       }
     }
   },
@@ -90,7 +88,7 @@
   },
   "overrides": [
     {
-      "include": ["*.spec.js", "src/setupTests.js"],
+      "includes": ["**/*.spec.js", "**/src/setupTests.js"],
       "linter": {
         "rules": {}
       },
@@ -107,7 +105,7 @@
       }
     },
     {
-      "include": ["src/registerServiceWorker.js", "src/helpers.ts"],
+      "includes": ["**/src/registerServiceWorker.js", "**/src/helpers.ts"],
       "linter": {
         "rules": {
           "suspicious": {
