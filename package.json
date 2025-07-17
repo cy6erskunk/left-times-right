@@ -69,8 +69,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
-    "lint": "npx biome check ./src",
-    "lint-write": "npx biome check --write ./src",
+    "lint": "npx @biomejs/biome check ./src",
+    "lint-write": "npx @biomejs/biome check --write ./src",
     "typecheck": "tsc --noEmit"
   },
   "jest": {
