@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { NumericInput } from '../../numeric-keyboard/index'
-
 import { useEffect, useRef, useState } from 'react'
 import {
   CORRECT_ANSWER_EMOJI,
@@ -8,6 +6,7 @@ import {
   INCORRECT_ANSWER_EMOJI,
   SECOND_IN_MS,
 } from '../../constants'
+import { NumericInput } from '../../numeric-keyboard/index'
 import PreviousTask from '../PreviousTask/PreviousTask'
 import Task from '../Task/Task'
 
