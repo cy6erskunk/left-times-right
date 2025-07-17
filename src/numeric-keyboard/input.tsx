@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, TouchEventHandler } from 'react'
+import React, { TouchEventHandler, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { NumericKeyboard } from './keyboard'
 import * as Keys from './lib/keys'

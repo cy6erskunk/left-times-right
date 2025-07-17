@@ -2,8 +2,8 @@ import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import {
-  GAMES_WON_KEY,
   GAME_TIMEOUT_IN_MS,
+  GAMES_WON_KEY,
   INITIAL_HEARTS,
   INITIAL_SCORE,
   TOP_SCORE_KEY,

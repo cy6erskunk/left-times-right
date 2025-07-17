@@ -57,7 +57,7 @@
     "@babel/core": "7.28.0",
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@babel/preset-env": "7.28.0",
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.1.1",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.3.0",
     "jest-environment-jsdom": "29.7.0",
@@ -69,8 +69,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
-    "lint": "npx biome check ./src",
-    "lint-write": "npx biome check --write ./src",
+    "lint": "npx @biomejs/biome check ./src",
+    "lint-write": "npx @biomejs/biome check --write ./src",
     "typecheck": "tsc --noEmit"
   },
   "jest": {
