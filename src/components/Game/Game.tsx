@@ -20,8 +20,8 @@ type ExternalProps = {
   onSubmitTask: () => void
   onFocus: () => void
   onAnimationEnd: () => void
-  inputRef: React.RefObject<HTMLInputElement>
-  emojiRef: React.RefObject<HTMLDivElement>
+  inputRef: React.RefObject<HTMLInputElement | null>
+  emojiRef: React.RefObject<HTMLDivElement | null>
   showEmoji: boolean
   isLove: boolean
 }
