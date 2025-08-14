@@ -53,10 +53,10 @@
     "workbox-webpack-plugin": "7.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.28.0",
-    "@babel/core": "7.28.0",
+    "@babel/cli": "7.28.3",
+    "@babel/core": "7.28.3",
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
-    "@babel/preset-env": "7.28.0",
+    "@babel/preset-env": "7.28.3",
     "@biomejs/biome": "2.1.4",
     "@testing-library/jest-dom": "6.7.0",
     "@testing-library/react": "16.3.0",
