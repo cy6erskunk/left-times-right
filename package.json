@@ -58,7 +58,7 @@
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@babel/preset-env": "7.28.3",
     "@biomejs/biome": "2.2.0",
-    "@testing-library/jest-dom": "6.7.0",
+    "@testing-library/jest-dom": "6.8.0",
     "@testing-library/react": "16.3.0",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
