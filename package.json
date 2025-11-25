@@ -60,7 +60,7 @@
     "@biomejs/biome": "2.3.6",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
-    "@types/react": "19.2.5",
+    "@types/react": "19.2.6",
     "@types/react-dom": "19.2.3",
     "jest-environment-jsdom": "30.2.0",
     "typescript": "5.9.3"
