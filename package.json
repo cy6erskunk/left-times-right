@@ -46,7 +46,7 @@
     "semver": "7.7.3",
     "source-map-loader": "5.0.0",
     "style-loader": "4.0.0",
-    "terser-webpack-plugin": "5.3.15",
+    "terser-webpack-plugin": "5.3.16",
     "webpack": "5.103.0",
     "webpack-dev-server": "5.2.2",
     "webpack-manifest-plugin": "6.0.1",
