@@ -3,6 +3,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as chalk from 'react-dev-utils/chalk.js'
+import JSON5 from 'json5'
 import * as resolve from 'resolve'
 import * as paths from './paths.js'
 
@@ -108,8 +109,8 @@ async function getModules() {
   // TypeScript project and set up the config
   // based on tsconfig.json
   if (hasTsConfig) {
-    const ts = await import('typescript')
-    config = ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config
+    // tsconfig.json may contain comments and trailing commas (JSONC)
+    config = JSON5.parse(fs.readFileSync(paths.appTsConfig, 'utf8'))
     // Otherwise we'll check if there is jsconfig.json
     // for non TS projects.
   } else if (hasJsConfig) {
