@@ -72,7 +72,6 @@ checkBrowsers(paths.appPath, isInteractive)
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
     const appName = require(paths.appPackageJson).name
 
-    const useTypeScript = fs.existsSync(paths.appTsConfig)
     const urls = prepareUrls(
       protocol,
       HOST,
@@ -85,7 +84,9 @@ checkBrowsers(paths.appPath, isInteractive)
       config,
       urls,
       useYarn,
-      useTypeScript,
+      // Type checking runs via `tsc` (TypeScript 7 has no JS API for
+      // fork-ts-checker-webpack-plugin to use)
+      useTypeScript: false,
       webpack,
     })
     // Load proxy config

@@ -28,6 +28,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "30.5.1",
     "jest-watch-typeahead": "3.0.1",
+    "json5": "2.2.3",
     "mini-css-extract-plugin": "2.10.2",
     "postcss": "8.5.28",
     "postcss-flexbugs-fixes": "5.0.2",
@@ -67,7 +68,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "tsc --noEmit && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "prepublishOnly": "npm run test && npm run build",
     "publish": "surge --domain https://left-times-right.surge.sh ./build",
