@@ -1,4 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# This workflow will do a clean install of node dependencies, then check, test and build the source code across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
@@ -15,8 +15,8 @@ jobs:
 
     strategy:
       matrix:
-        # See supported Node.js at https://nodejs.org/en/about/previous-releases
-        node-version: [18, 20, 22]
+        # Vite+ requires Node ^22.18.0 || ^24.11.0 || >=26.0.0
+        node-version: [22, 24]
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -24,7 +24,9 @@ jobs:
         uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm test
+      # Format, lint and type check in one pass
+      - run: npx vp check
+      - run: npx vp test
+      - run: npx vp build
