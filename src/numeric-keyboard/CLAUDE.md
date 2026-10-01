@@ -3,11 +3,13 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Commands
+
 - No specific build/lint/test commands provided for this component
 - Follow TypeScript typing and React best practices
 - Test by importing the component into your React application
 
 ## Code Style Guidelines
+
 - Use TypeScript with explicit types for all props, state and functions
 - Use functional React components with hooks (useState, useRef, useEffect)
 - Follow consistent naming: PascalCase for components, camelCase for variables/functions
