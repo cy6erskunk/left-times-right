@@ -70,6 +70,18 @@ export default defineConfig({
       'no-shadow-restricted-names': 'error',
       'no-sparse-arrays': 'error',
       'no-with': 'error',
+      // noUselessUndefinedInitialization
+      'unicorn/no-useless-undefined': [
+        'error',
+        { checkArguments: false, checkArrowFunctionBody: false },
+      ],
+      // useLiteralKeys
+      'dot-notation': 'error',
+      'no-useless-computed-key': 'error',
+      // useSingleVarDeclarator
+      'one-var': ['error', 'never'],
+      // noDuplicateParameters: no rule needed, duplicate parameters are a
+      // syntax error in ES modules and fail `vp check` at parse time.
     },
     env: { browser: true },
     overrides: [
