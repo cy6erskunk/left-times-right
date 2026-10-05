@@ -15,7 +15,7 @@ interface NumericKeyboardProps {
 export function NumericKeyboard({
   layout = 'number',
   enterText = 'enter',
-  onEnterPress = undefined,
+  onEnterPress,
   onPress,
 }: NumericKeyboardProps) {
   // Get the proper layout based on the prop value

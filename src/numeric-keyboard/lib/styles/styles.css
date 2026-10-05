@@ -1,6 +1,6 @@
 @font-face {
   font-family: numeric-keyboard;
-  src: url("numeric-keyboard.woff") format("woff");
+  src: url('numeric-keyboard.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,18 +27,18 @@
 .numeric-keyboard-key[data-key='""'] {
   pointer-events: none;
 }
-.numeric-keyboard-key[data-key="enter"] {
+.numeric-keyboard-key[data-key='enter'] {
   color: #fff;
   background: #007aff;
 }
-.numeric-keyboard-key[data-key="enter"]:active {
+.numeric-keyboard-key[data-key='enter']:active {
   background: #0051a8;
 }
 .numeric-keyboard-key[data-icon]::before {
   content: attr(data-icon);
 }
-.numeric-keyboard-key[data-icon="del"]::before,
-.numeric-keyboard-key[data-icon="esc"]::before {
+.numeric-keyboard-key[data-icon='del']::before,
+.numeric-keyboard-key[data-icon='esc']::before {
   font-family: numeric-keyboard !important;
   speak: none;
   font-style: normal;

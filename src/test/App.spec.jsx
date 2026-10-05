@@ -33,14 +33,20 @@ test('sets main scene correctly', () => {
 })
 
 it('renders outro when lives are gone', () => {
-  jest.useFakeTimers()
+  vi.useFakeTimers()
 
   render(<App />)
   act(() => screen.getByRole('button').click())
 
-  act(() => jest.advanceTimersByTime(5000))
-  act(() => jest.advanceTimersByTime(5000))
-  act(() => jest.advanceTimersByTime(5000))
+  act(() => {
+    vi.advanceTimersByTime(5000)
+  })
+  act(() => {
+    vi.advanceTimersByTime(5000)
+  })
+  act(() => {
+    vi.advanceTimersByTime(5000)
+  })
 
   expect(screen.queryByLabelText('start')).not.toBeInTheDocument()
   expect(screen.queryByLabelText('scores')).not.toBeInTheDocument()
