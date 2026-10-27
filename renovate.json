@@ -4,5 +4,12 @@
     "github>cy6erskunk/renovate-config:automerge-patch-deps",
     "github>cy6erskunk/renovate-config:automerge-minor-patch-devdeps"
   ],
-  "rangeStrategy": "pin"
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "description": "vite-plus requires the vite override to point at the vite-plus-core of the same release",
+      "matchPackageNames": ["vite-plus", "@voidzero-dev/vite-plus-core"],
+      "groupName": "vite-plus"
+    }
+  ]
 }
